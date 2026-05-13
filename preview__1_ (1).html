@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Método 50·30·20 — Controle Financeiro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+  --bg:        #0a0c10;
+  --surface:   #111318;
+  --surface2:  #181c24;
+  --border:    rgba(255,255,255,0.07);
+  --gold:      #c9a84c;
+  --gold-dim:  #8a6a28;
+  --gold-glow: rgba(201,168,76,0.18);
+  --green:     #3ecf74;
+  --blue:      #4d9ef7;
+  --orange:    #f7924d;
+  --text:      #e8eaf0;
+  --muted:     #6b7280;
+  --radius:    16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── NOISE TEXTURE OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 100px 24px 80px;
+  overflow: hidden;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+.hero-orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  animation: orb-pulse 6s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(77,158,247,0.08) 0%, transparent 70%);
+  bottom: 0; right: 10%;
+  animation: orb-pulse 8s ease-in-out infinite reverse;
+}
+
+@keyframes orb-pulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50%       { transform: translateX(-50%) scale(1.1); opacity: 0.7; }
+}
+.hero-orb-2 { animation: orb-float 8s ease-in-out infinite; }
+@keyframes orb-float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-20px); }
+}
+
+.hero-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  background: rgba(201,168,76,0.07);
+  padding: 6px 16px;
+  border-radius: 99px;
+  margin-bottom: 28px;
+  animation: fade-up 0.8s ease both;
+}
+
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 30%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fade-up 0.9s 0.1s ease both;
+}
+
+.hero p {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 420px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+  animation: fade-up 1s 0.2s ease both;
+}
+
+.hero-divider {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 40px auto 0;
+  animation: fade-up 1s 0.3s ease both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── LAYOUT ─── */
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── SECTION ─── */
+.section {
+  margin-top: 80px;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.section.visible {
+  opacity: 1;
+  transform: none;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+  color: var(--text);
+}
+
+/* ─── METHOD INTRO ─── */
+.method-text {
+  max-width: 580px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* ─── CARDS ─── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  cursor: default;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.card-green::before  { background: radial-gradient(ellipse at top left, rgba(62,207,116,0.1), transparent 60%); }
+.card-blue::before   { background: radial-gradient(ellipse at top left, rgba(77,158,247,0.1), transparent 60%); }
+.card-orange::before { background: radial-gradient(ellipse at top left, rgba(247,146,77,0.1), transparent 60%); }
+
+.card:hover { transform: translateY(-6px); }
+.card:hover::before { opacity: 1; }
+.card-green:hover  { border-color: rgba(62,207,116,0.3);  box-shadow: 0 20px 60px rgba(62,207,116,0.08); }
+.card-blue:hover   { border-color: rgba(77,158,247,0.3);  box-shadow: 0 20px 60px rgba(77,158,247,0.08); }
+.card-orange:hover { border-color: rgba(247,146,77,0.3);  box-shadow: 0 20px 60px rgba(247,146,77,0.08); }
+
+.card-pct {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3.2rem;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+.card-green  .card-pct { color: var(--green); }
+.card-blue   .card-pct { color: var(--blue); }
+.card-orange .card-pct { color: var(--orange); }
+
+.card-title {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.card-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.card-bar {
+  margin-top: 24px;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--border);
+  overflow: hidden;
+}
+.card-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.card.visible .card-bar-fill { transform: scaleX(1); }
+.card-green  .card-bar-fill { background: var(--green);  width: 50%; }
+.card-blue   .card-bar-fill { background: var(--blue);   width: 30%; }
+.card-orange .card-bar-fill { background: var(--orange); width: 20%; }
+
+/* ─── CHART ─── */
+.chart-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.chart-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;
+  flex: 0 0 auto;
+}
+.chart-box canvas { width: 260px !important; height: 260px !important; }
+
+.chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-info { flex: 1; }
+.legend-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.legend-value {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* ─── SIMULATOR ─── */
+.simulator-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.input-group {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 600;
+  color: var(--gold);
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.simulator-card input {
+  width: 100%;
+  padding: 16px 18px 16px 46px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.simulator-card input::placeholder { color: var(--muted); }
+.simulator-card input:focus {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+
+.btn-calc {
+  padding: 16px 32px;
+  background: var(--gold);
+  color: #0a0c10;
+  border: none;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+.btn-calc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+  background: #d4ae58;
+}
+.btn-calc:active { transform: translateY(0); }
+
+.btn-calc span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.2);
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+}
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+/* Result grid */
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.result-grid.show { opacity: 1; transform: none; }
+
+.result-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 22px 20px;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+.result-item:hover { border-color: rgba(255,255,255,0.12); }
+
+.result-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.result-pct {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+.result-val {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.result-name {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.r-green  { --c: var(--green); }
+.r-blue   { --c: var(--blue); }
+.r-orange { --c: var(--orange); }
+
+.result-label, .result-pct { color: var(--c); }
+.result-item { border-top: 3px solid var(--c); }
+
+/* ─── EMERGENCY ─── */
+.emergency-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.emergency-text {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+}
+
+.emergency-text p {
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.tip-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tip-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.tip-list li::before {
+  content: '→';
+  color: var(--gold);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.chart-box-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;
+}
+.chart-box-bar canvas { width: 100% !important; }
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  position: relative;
+  z-index: 1;
+}
+footer strong { color: var(--gold); }
+
+/* ─── SCROLL INDICATOR ─── */
+.scroll-line {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--green));
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 700px) {
+  .chart-wrapper { flex-direction: column; align-items: stretch; }
+  .emergency-layout { grid-template-columns: 1fr; }
+  .result-grid { grid-template-columns: 1fr; }
+  .chart-box { flex: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-line" id="scrollLine"></div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-badge">Finanças Pessoais</div>
+  <h1>Método<br>50 · 30 · 20</h1>
+  <p>Uma regra simples para organizar sua renda, construir reservas e investir no futuro.</p>
+  <div class="hero-divider"></div>
+</header>
+
+<main class="container">
+
+  <!-- O MÉTODO -->
+  <section class="section">
+    <p class="section-label">Conceito</p>
+    <h2 class="section-title">Como funciona?</h2>
+    <p class="method-text">
+      Divida sua renda líquida em três grandes blocos: metade cobre o essencial da vida,
+      um terço financia seus momentos e bem-estar, e o restante constrói seu patrimônio
+      e segurança. Simples, direto e eficaz.
+    </p>
+  </section>
+
+  <!-- CARDS -->
+  <section class="section">
+    <p class="section-label">Distribuição</p>
+    <h2 class="section-title">Os três pilares</h2>
+    <div class="cards">
+
+      <div class="card card-green section">
+        <div class="card-pct">50%</div>
+        <div class="card-title">Necessidades Essenciais</div>
+        <div class="card-desc">Moradia, alimentação, transporte, saúde e contas fixas. O que você não pode deixar de pagar.</div>
+        <div class="card-bar"><div class="card-bar-fill"></div></div>
+      </div>
+
+      <div class="card card-blue section">
+        <div class="card-pct">30%</div>
+        <div class="card-title">Estilo de Vida</div>
+        <div class="card-desc">Lazer, restaurantes, streaming, viagens, academia. O que traz qualidade e prazer ao seu dia.</div>
+        <div class="card-bar"><div class="card-bar-fill"></div></div>
+      </div>
+
+      <div class="card card-orange section">
+        <div class="card-pct">20%</div>
+        <div class="card-title">Poupança e Investimentos</div>
+        <div class="card-desc">Reserva de emergência, renda fixa, ações, previdência. O que constrói o seu futuro.</div>
+        <div class="card-bar"><div class="card-bar-fill"></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GRÁFICO -->
+  <section class="section">
+    <p class="section-label">Visualização</p>
+    <h2 class="section-title">Distribuição da renda</h2>
+    <div class="chart-wrapper">
+      <div class="chart-box">
+        <canvas id="grafico"></canvas>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--green)"></div>
+          <div class="legend-info">
+            <div class="legend-label">Necessidades essenciais</div>
+            <div class="legend-value">50% da renda</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--blue)"></div>
+          <div class="legend-info">
+            <div class="legend-label">Estilo de vida</div>
+            <div class="legend-value">30% da renda</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:var(--orange)"></div>
+          <div class="legend-info">
+            <div class="legend-label">Poupança e investimentos</div>
+            <div class="legend-value">20% da renda</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIMULADOR -->
+  <section class="section">
+    <p class="section-label">Simulador</p>
+    <h2 class="section-title">Calcule o seu orçamento</h2>
+    <div class="simulator-card">
+      <div class="input-row">
+        <div class="input-group">
+          <span class="input-prefix">R$</span>
+          <input type="number" id="renda" placeholder="Digite sua renda mensal líquida" min="0" step="100">
+        </div>
+        <button class="btn-calc" onclick="calcular(event)">Calcular agora</button>
+      </div>
+      <div class="result-grid" id="resultado">
+        <div class="result-item r-green">
+          <div class="result-label">Necessidades</div>
+          <div class="result-pct">50%</div>
+          <div class="result-val" id="v50">R$ —</div>
+          <div class="result-name">Essenciais</div>
+        </div>
+        <div class="result-item r-blue">
+          <div class="result-label">Estilo de vida</div>
+          <div class="result-pct">30%</div>
+          <div class="result-val" id="v30">R$ —</div>
+          <div class="result-name">Pessoal</div>
+        </div>
+        <div class="result-item r-orange">
+          <div class="result-label">Investimentos</div>
+          <div class="result-pct">20%</div>
+          <div class="result-val" id="v20">R$ —</div>
+          <div class="result-name">Futuro</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVA -->
+  <section class="section">
+    <p class="section-label">Segurança</p>
+    <h2 class="section-title">Reserva de emergência</h2>
+    <div class="emergency-layout">
+      <div class="emergency-text">
+        <p>
+          Uma reserva de emergência é a base de qualquer planejamento financeiro sólido.
+          Ela protege você de imprevistos sem comprometer seus investimentos.
+        </p>
+        <ul class="tip-list">
+          <li>Guarde entre <strong>3 e 6 meses</strong> do seu custo de vida total</li>
+          <li>Mantenha em aplicações com <strong>liquidez diária</strong> (CDB D0, Tesouro Selic)</li>
+          <li>Priorize a reserva antes de investir em ativos de risco</li>
+          <li>Reponha imediatamente após qualquer uso</li>
+        </ul>
+      </div>
+      <div class="chart-box-bar">
+        <canvas id="reservaChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Feito com propósito · <strong>Educação Financeira</strong>
+</footer>
+
+<script>
+// ─── SCROLL PROGRESS ───
+window.addEventListener('scroll', () => {
+  const el = document.getElementById('scrollLine');
+  const progress = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  el.style.width = progress + '%';
+});
+
+// ─── INTERSECTION OBSERVER ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
+
+// ─── CHART: DONUT ───
+new Chart(document.getElementById('grafico'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Essenciais 50%', 'Estilo de vida 30%', 'Investimentos 20%'],
+    datasets: [{
+      data: [50, 30, 20],
+      backgroundColor: ['#3ecf74', '#4d9ef7', '#f7924d'],
+      borderColor: '#111318',
+      borderWidth: 4,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    cutout: '72%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#181c24',
+        borderColor: 'rgba(255,255,255,0.08)',
+        borderWidth: 1,
+        titleColor: '#e8eaf0',
+        bodyColor: '#6b7280',
+        padding: 12,
+        cornerRadius: 10
+      }
+    },
+    animation: { animateScale: true, duration: 1400, easing: 'easeOutQuart' }
+  }
+});
+
+// ─── CHART: BAR ───
+new Chart(document.getElementById('reservaChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Mínimo recomendado', 'Ideal'],
+    datasets: [{
+      label: 'Meses de custo de vida',
+      data: [3, 6],
+      backgroundColor: ['rgba(201,168,76,0.4)', 'rgba(201,168,76,0.85)'],
+      borderColor: ['#c9a84c', '#c9a84c'],
+      borderWidth: 1,
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#181c24',
+        borderColor: 'rgba(255,255,255,0.08)',
+        borderWidth: 1,
+        titleColor: '#e8eaf0',
+        bodyColor: '#6b7280',
+        padding: 12,
+        cornerRadius: 10,
+        callbacks: {
+          label: ctx => ` ${ctx.parsed.y} meses`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 } }
+      },
+      y: {
+        beginAtZero: true,
+        max: 8,
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: {
+          color: '#6b7280',
+          font: { family: 'DM Sans', size: 12 },
+          callback: v => v + 'm'
+        }
+      }
+    },
+    animation: { duration: 1400, easing: 'easeOutQuart' }
+  }
+});
+
+// ─── SIMULATOR ───
+function calcular(e) {
+  ripple(e);
+  const renda = parseFloat(document.getElementById('renda').value);
+  if (!renda || renda <= 0) return;
+
+  const r50 = renda * 0.5;
+  const r30 = renda * 0.3;
+  const r20 = renda * 0.2;
+
+  const res = document.getElementById('resultado');
+  res.classList.add('show');
+
+  animCount(document.getElementById('v50'), r50);
+  animCount(document.getElementById('v30'), r30);
+  animCount(document.getElementById('v20'), r20);
+}
+
+function animCount(el, target) {
+  const dur = 900;
+  let start = null;
+  const fmt = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  function step(ts) {
+    if (!start) start = ts;
+    const p = Math.min((ts - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = fmt(target * ease);
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = fmt(target);
+  }
+  requestAnimationFrame(step);
+}
+
+function ripple(e) {
+  const btn = e.currentTarget;
+  const span = document.createElement('span');
+  span.className = 'ripple';
+  const d = Math.max(btn.clientWidth, btn.clientHeight);
+  span.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX-btn.getBoundingClientRect().left-d/2}px;top:${e.clientY-btn.getBoundingClientRect().top-d/2}px`;
+  btn.appendChild(span);
+  setTimeout(() => span.remove(), 700);
+}
+
+// Enter key
+document.getElementById('renda').addEventListener('keydown', e => {
+  if (e.key === 'Enter') calcular({ currentTarget: document.querySelector('.btn-calc'), clientX: 0, clientY: 0, getBoundingClientRect: () => ({left:0,top:0}) });
+});
+</script>
+</body>
+</html>
