@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Método 50·30·20 — Controle Financeiro</title>
+<title id="pageTitle">Método 50·30·20 — Controle Financeiro</title>
 
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-/* ─── THEME VARIABLES ─── */
+/* THEME VARIABLES */
 :root[data-theme="dark"] {
   --bg:        #0a0c10;
   --surface:   #111318;
@@ -63,7 +63,7 @@ body {
   transition: background 0.4s, color 0.4s;
 }
 
-/* ─── NOISE TEXTURE ─── */
+/* NOISE TEXTURE - com aceleração de hardware para evitar lag no scroll mobile */
 body::before {
   content: '';
   position: fixed;
@@ -72,9 +72,12 @@ body::before {
   pointer-events: none;
   z-index: 0;
   opacity: 0.6;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-/* ─── SCROLL INDICATOR ─── */
+/* SCROLL INDICATOR */
 .scroll-line {
   position: fixed;
   top: 0; left: 0;
@@ -85,7 +88,7 @@ body::before {
   transition: width 0.1s linear;
 }
 
-/* ─── NAVBAR ─── */
+/* NAVBAR */
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -102,6 +105,7 @@ body::before {
   transition: background 0.4s, border-color 0.4s;
   transform: translateY(-100%);
   animation: nav-drop 0.6s 0.5s ease forwards;
+  gap: 12px;
 }
 @keyframes nav-drop {
   to { transform: translateY(0); }
@@ -113,6 +117,8 @@ body::before {
   color: var(--gold);
   text-decoration: none;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-links {
@@ -120,6 +126,8 @@ body::before {
   align-items: center;
   gap: 6px;
   list-style: none;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .nav-links a {
@@ -131,6 +139,7 @@ body::before {
   border-radius: 8px;
   transition: color 0.2s, background 0.2s;
   letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .nav-links a:hover,
 .nav-links a.active {
@@ -142,9 +151,9 @@ body::before {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
-/* Theme toggle */
 .theme-toggle {
   width: 36px; height: 36px;
   border-radius: 10px;
@@ -157,10 +166,10 @@ body::before {
   justify-content: center;
   transition: color 0.2s, background 0.2s, border-color 0.2s;
   font-size: 16px;
+  flex-shrink: 0;
 }
 .theme-toggle:hover { color: var(--gold); border-color: var(--gold-dim); }
 
-/* Mobile nav toggle */
 .nav-hamburger {
   display: none;
   width: 36px; height: 36px;
@@ -175,6 +184,7 @@ body::before {
   flex-direction: column;
   gap: 4px;
   padding: 8px;
+  flex-shrink: 0;
 }
 .nav-hamburger span {
   display: block;
@@ -188,10 +198,9 @@ body::before {
 .nav-hamburger.open span:nth-child(2) { opacity: 0; }
 .nav-hamburger.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
-/* Mobile menu */
 .mobile-menu {
   position: fixed;
-  top: 64px; left: 0; right: 0;
+  top: 108px; left: 0; right: 0;
   background: var(--nav-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -201,8 +210,10 @@ body::before {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  transform: translateY(-110%);
+  transform: translateY(-140%);
   transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+  max-height: calc(100vh - 108px);
+  overflow-y: auto;
 }
 .mobile-menu.open { transform: translateY(0); }
 .mobile-menu a {
@@ -216,11 +227,62 @@ body::before {
 }
 .mobile-menu a:hover { color: var(--text); background: var(--surface2); }
 
-/* ─── HERO ─── */
+/* VERSION BAR (mode switcher) */
+.version-bar {
+  position: fixed;
+  top: 64px; left: 0; right: 0;
+  z-index: 998;
+  height: 44px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  transition: background 0.4s, border-color 0.4s;
+  animation: nav-drop 0.6s 0.6s ease forwards;
+  transform: translateY(-100%);
+}
+.version-bar::-webkit-scrollbar { display: none; }
+.version-bar::after {
+  content: '';
+  display: block;
+  min-width: 16px;
+  height: 1px;
+  flex-shrink: 0;
+}
+
+.version-pill {
+  flex-shrink: 0;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  padding: 6px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.version-pill:hover { color: var(--text); border-color: var(--gold-dim); }
+.version-pill.active {
+  color: var(--bg);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+/* HERO */
 .hero {
   position: relative;
   text-align: center;
-  padding: 160px 24px 100px;
+  padding: 204px 24px 100px;
   overflow: hidden;
 }
 
@@ -290,7 +352,7 @@ body::before {
   margin-top: 20px;
   font-size: 1.1rem;
   color: var(--muted);
-  max-width: 420px;
+  max-width: 460px;
   margin-left: auto; margin-right: auto;
   line-height: 1.7;
   animation: fade-up 1s 0.2s ease both;
@@ -392,7 +454,6 @@ body::before {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── LAYOUT ─── */
 .container {
   max-width: 1080px;
   margin: 0 auto;
@@ -401,12 +462,12 @@ body::before {
   z-index: 1;
 }
 
-/* ─── SECTION ─── */
 .section {
   margin-top: 80px;
   opacity: 0;
   transform: translateY(32px);
   transition: opacity 0.7s ease, transform 0.7s ease;
+  scroll-margin-top: 128px;
 }
 .section.visible {
   opacity: 1;
@@ -431,7 +492,6 @@ body::before {
   color: var(--text);
 }
 
-/* ─── METHOD INTRO ─── */
 .method-text {
   max-width: 580px;
   color: var(--muted);
@@ -439,10 +499,9 @@ body::before {
   font-size: 1rem;
 }
 
-/* ─── CARDS ─── */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
@@ -455,6 +514,7 @@ body::before {
   overflow: hidden;
   transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
   cursor: default;
+  min-width: 0;
 }
 
 .card::before {
@@ -511,14 +571,14 @@ body::before {
   border-radius: 99px;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 1s 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1s 0.1s cubic-bezier(0.22, 1, 0.36, 1), width 0.6s ease;
 }
 .card.visible .card-bar-fill { transform: scaleX(1); }
-.card-green  .card-bar-fill { background: var(--green);  width: 50%; }
-.card-blue   .card-bar-fill { background: var(--blue);   width: 30%; }
-.card-orange .card-bar-fill { background: var(--orange); width: 20%; }
+.card-green  .card-bar-fill { background: var(--green); }
+.card-blue   .card-bar-fill { background: var(--blue); }
+.card-orange .card-bar-fill { background: var(--orange); }
 
-/* ─── ACCORDION / STEPS ─── */
+/* ACCORDION */
 .accordion {
   display: flex;
   flex-direction: column;
@@ -564,6 +624,7 @@ body::before {
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--text);
+  min-width: 0;
 }
 
 .accordion-icon {
@@ -574,18 +635,27 @@ body::before {
 }
 .accordion-item.open .accordion-icon { transform: rotate(180deg); }
 
+/* Animação via CSS Grid: robusta a qualquer mudança de tamanho de tela (rotação, resize), sem precisar recalcular altura via JS */
 .accordion-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1), padding 0.3s;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.22,1,0.36,1);
 }
-.accordion-item.open .accordion-body { max-height: 400px; }
+.accordion-item.open .accordion-body {
+  grid-template-rows: 1fr;
+}
+.accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+}
 
 .accordion-content {
   padding: 0 24px 22px 72px;
   color: var(--muted);
   font-size: 0.875rem;
   line-height: 1.8;
+  overflow: hidden;
+  min-height: 0;
 }
 .accordion-content ul {
   list-style: none;
@@ -600,7 +670,7 @@ body::before {
   margin-right: 8px;
 }
 
-/* ─── CHART ─── */
+/* CHART */
 .chart-wrapper {
   display: flex;
   align-items: center;
@@ -614,15 +684,23 @@ body::before {
   border-radius: var(--radius);
   padding: 36px;
   flex: 0 0 auto;
+  max-width: 100%;
   transition: background 0.4s, border-color 0.4s;
 }
-.chart-box canvas { width: 260px !important; height: 260px !important; }
+.chart-canvas-wrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  max-width: 100%;
+  margin: 0 auto;
+}
 
 .chart-legend {
   display: flex;
   flex-direction: column;
   gap: 20px;
   flex: 1;
+  min-width: 240px;
 }
 
 .legend-item {
@@ -646,7 +724,7 @@ body::before {
   flex-shrink: 0;
 }
 
-.legend-info { flex: 1; }
+.legend-info { flex: 1; min-width: 0; }
 .legend-label {
   font-size: 0.85rem;
   color: var(--muted);
@@ -665,7 +743,7 @@ body::before {
   min-height: 1em;
 }
 
-/* ─── SIMULATOR ─── */
+/* SIMULATOR */
 .simulator-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -761,7 +839,6 @@ body::before {
 }
 @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
 
-/* Result grid */
 .result-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -779,6 +856,7 @@ body::before {
   padding: 22px 20px;
   text-align: center;
   transition: border-color 0.3s, background 0.4s;
+  min-width: 0;
 }
 .result-item:hover { border-color: rgba(255,255,255,0.12); }
 
@@ -798,11 +876,51 @@ body::before {
   font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 2px;
+  word-break: break-word;
 }
 .result-name {
   font-size: 0.78rem;
   color: var(--muted);
 }
+
+.spent-row {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border2);
+  text-align: left;
+}
+.spent-row label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.spent-row input {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+.spent-row input:focus { border-color: var(--gold-dim); }
+.remaining {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  min-height: 1.2em;
+  text-align: left;
+}
+.remaining.ok { color: var(--green); }
+.remaining.warn { color: var(--orange); }
+.remaining.over { color: #ef4444; }
 
 .r-green  { --c: var(--green); }
 .r-blue   { --c: var(--blue); }
@@ -811,7 +929,7 @@ body::before {
 .result-label, .result-pct { color: var(--c); }
 .result-item { border-top: 3px solid var(--c); }
 
-/* ─── RESERVA CALCULATOR ─── */
+/* SECONDARY CALCULATOR */
 .reserva-calc {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -853,7 +971,7 @@ body::before {
   display: block;
   margin-bottom: 6px;
 }
-.reserva-field input, .reserva-field select {
+.reserva-field input {
   width: 100%;
   padding: 12px 14px;
   background: var(--surface2);
@@ -864,16 +982,8 @@ body::before {
   font-size: 0.9rem;
   outline: none;
   transition: border-color 0.3s;
-  appearance: none;
 }
-.reserva-field select {
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 36px;
-}
-.reserva-field input:focus, .reserva-field select:focus {
+.reserva-field input:focus {
   border-color: var(--gold-dim);
 }
 
@@ -892,6 +1002,7 @@ body::before {
   border-radius: 10px;
   padding: 16px;
   border: 1px solid var(--border);
+  min-width: 0;
 }
 .reserva-result-label {
   font-size: 0.72rem;
@@ -905,6 +1016,7 @@ body::before {
   font-family: 'DM Serif Display', serif;
   font-size: 1.4rem;
   color: var(--gold);
+  word-break: break-word;
 }
 .reserva-result-sub {
   font-size: 0.75rem;
@@ -912,7 +1024,7 @@ body::before {
   margin-top: 2px;
 }
 
-/* ─── EMERGENCY ─── */
+/* SECONDARY SECTION (emergency / debt / fire) */
 .emergency-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -926,6 +1038,7 @@ body::before {
   border-radius: var(--radius);
   padding: 36px 32px;
   transition: background 0.4s;
+  min-width: 0;
 }
 
 .emergency-text p {
@@ -960,14 +1073,17 @@ body::before {
   border-radius: var(--radius);
   padding: 36px;
   transition: background 0.4s;
+  min-width: 0;
 }
-.chart-box-bar canvas { width: 100% !important; }
+.bar-canvas-wrap { position: relative; width: 100%; height: 260px; }
 
-/* ─── TOAST ─── */
+/* TOAST */
 .toast {
   position: fixed;
   bottom: 24px;
   right: 24px;
+  left: 24px;
+  margin-left: auto;
   background: var(--surface2);
   border: 1px solid var(--border2);
   border-radius: 12px;
@@ -985,10 +1101,10 @@ body::before {
   max-width: 320px;
 }
 .toast.show { transform: translateY(0); opacity: 1; }
-.toast-icon { font-size: 18px; }
+.toast-icon { font-size: 18px; flex-shrink: 0; }
 .toast-text { flex: 1; line-height: 1.4; }
 
-/* ─── FOOTER ─── */
+/* FOOTER */
 footer {
   text-align: center;
   padding: 40px 24px;
@@ -1015,26 +1131,53 @@ footer strong { color: var(--gold); }
 }
 .footer-links a:hover { color: var(--gold); }
 
-/* ─── RESPONSIVE ─── */
+/* SR-only helper para os fallbacks de canvas */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-hamburger { display: flex; }
-  .hero { padding: 120px 24px 80px; }
+  .hero { padding: 164px 20px 72px; }
   .hero-stats { gap: 24px; }
   .hero-stat-sep { display: none; }
+  .version-bar { padding: 0 16px; }
+  .navbar { padding: 0 16px; }
 }
 @media (max-width: 700px) {
   .chart-wrapper { flex-direction: column; align-items: stretch; }
   .emergency-layout { grid-template-columns: 1fr; }
   .result-grid { grid-template-columns: 1fr; }
-  .chart-box { flex: none; }
+  .chart-box { flex: none; padding: 24px; }
   .reserva-result { grid-template-columns: 1fr; }
-  .accordion-content { padding-left: 24px; }
+  .accordion-content { padding: 0 20px 20px 24px; }
+  .simulator-card { padding: 28px 22px; }
+  .toast { left: 16px; right: 16px; max-width: none; bottom: 16px; }
+  .bar-canvas-wrap { height: 220px; }
 }
 @media (max-width: 480px) {
-  .hero h1 { font-size: 2.8rem; }
-  .simulator-card { padding: 24px 20px; }
-  .btn-calc { width: 100%; }
+  .hero h1 { font-size: 2.6rem; }
+  .simulator-card { padding: 22px 16px; }
+  .btn-calc { width: 100%; justify-content: center; }
+  .input-row { gap: 20px; }
+  .chart-canvas-wrap { width: 210px; height: 210px; }
+  .card { padding: 26px 22px; }
+  .card-pct { font-size: 2.6rem; }
+  .reserva-calc { padding: 22px; }
+  .emergency-text { padding: 26px 22px; }
+}
+@media (max-width: 360px) {
+  .hero h1 { font-size: 2.2rem; }
+  .hero-badge { font-size: 10px; padding: 5px 12px; }
+  .version-pill { font-size: 0.7rem; padding: 5px 11px; }
 }
 </style>
 </head>
@@ -1042,15 +1185,14 @@ footer strong { color: var(--gold); }
 
 <div class="scroll-line" id="scrollLine"></div>
 
-<!-- NAVBAR -->
 <nav class="navbar" id="navbar">
-  <a href="#inicio" class="nav-logo">50·30·20</a>
-  <ul class="nav-links">
-    <li><a href="#metodo">O Método</a></li>
-    <li><a href="#pilares">Pilares</a></li>
-    <li><a href="#simulador">Simulador</a></li>
-    <li><a href="#reserva">Reserva</a></li>
-    <li><a href="#passos">Passo a passo</a></li>
+  <a href="#inicio" class="nav-logo" data-target="inicio" id="navLogo">50·30·20</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a data-target="metodo" href="#metodo">O Método</a></li>
+    <li><a data-target="pilares" href="#pilares">Pilares</a></li>
+    <li><a data-target="simulador" href="#simulador">Simulador</a></li>
+    <li><a data-target="reserva" href="#reserva">Reserva</a></li>
+    <li><a data-target="passos" href="#passos">Passo a passo</a></li>
   </ul>
   <div class="nav-right">
     <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema claro/escuro">
@@ -1062,41 +1204,45 @@ footer strong { color: var(--gold); }
   </div>
 </nav>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#metodo">O Método</a>
-  <a href="#pilares">Pilares</a>
-  <a href="#simulador">Simulador</a>
-  <a href="#reserva">Reserva</a>
-  <a href="#passos">Passo a passo</a>
+<div class="version-bar" id="versionBar">
+  <button class="version-pill" data-mode="ok">Equilibrado 50·30·20</button>
+  <button class="version-pill" data-mode="d">Endividado(a) 50·40·10</button>
+  <button class="version-pill" data-mode="l">Independente 30·20·50</button>
 </div>
 
-<!-- HERO -->
+<div class="mobile-menu" id="mobileMenu">
+  <a data-target="metodo" href="#metodo">O Método</a>
+  <a data-target="pilares" href="#pilares">Pilares</a>
+  <a data-target="simulador" href="#simulador">Simulador</a>
+  <a data-target="reserva" href="#reserva">Reserva</a>
+  <a data-target="passos" href="#passos">Passo a passo</a>
+</div>
+
 <header class="hero" id="inicio">
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
   <div class="hero-orb hero-orb-3"></div>
-  <div class="hero-badge">Finanças Pessoais</div>
-  <h1>Método<br>50 · 30 · 20</h1>
-  <p>Uma regra simples para organizar sua renda, construir reservas e investir no futuro.</p>
+  <div class="hero-badge" id="heroBadge">Finanças Pessoais</div>
+  <h1 id="heroTitle">Método<br>50 · 30 · 20</h1>
+  <p id="heroSubtitle">Uma regra simples para organizar sua renda, construir reservas e investir no futuro.</p>
   <div class="hero-actions">
-    <a href="#simulador" class="btn-primary">Simular agora →</a>
-    <a href="#metodo" class="btn-secondary">Como funciona</a>
+    <a href="#simulador" data-target="simulador" class="btn-primary">Simular agora →</a>
+    <a href="#metodo" data-target="metodo" class="btn-secondary">Como funciona</a>
   </div>
-  <div class="hero-stats">
+  <div class="hero-stats" id="heroStats">
     <div class="hero-stat">
-      <div class="hero-stat-num">50%</div>
-      <div class="hero-stat-label">Essenciais</div>
+      <div class="hero-stat-num" id="heroStatNum1">50%</div>
+      <div class="hero-stat-label" id="heroStatLabel1">Essenciais</div>
     </div>
     <div class="hero-stat-sep"></div>
     <div class="hero-stat">
-      <div class="hero-stat-num">30%</div>
-      <div class="hero-stat-label">Bem-estar</div>
+      <div class="hero-stat-num" id="heroStatNum2">30%</div>
+      <div class="hero-stat-label" id="heroStatLabel2">Bem-estar</div>
     </div>
     <div class="hero-stat-sep"></div>
     <div class="hero-stat">
-      <div class="hero-stat-num">20%</div>
-      <div class="hero-stat-label">Futuro</div>
+      <div class="hero-stat-num" id="heroStatNum3">20%</div>
+      <div class="hero-stat-label" id="heroStatLabel3">Futuro</div>
     </div>
   </div>
   <div class="hero-divider"></div>
@@ -1104,77 +1250,78 @@ footer strong { color: var(--gold); }
 
 <main class="container">
 
-  <!-- O MÉTODO -->
   <section class="section" id="metodo">
-    <p class="section-label">Conceito</p>
+    <p class="section-label" id="metodoLabel">Conceito</p>
     <h2 class="section-title">Como funciona?</h2>
-    <p class="method-text">
+    <p class="method-text" id="methodText">
       Divida sua renda líquida em três grandes blocos: metade cobre o essencial da vida,
       um terço financia seus momentos e bem-estar, e o restante constrói seu patrimônio
       e segurança. Simples, direto e eficaz.
     </p>
   </section>
 
-  <!-- CARDS / PILARES -->
   <section class="section" id="pilares">
     <p class="section-label">Distribuição</p>
-    <h2 class="section-title">Os três pilares</h2>
+    <h2 class="section-title" id="pilaresTitle">Os três pilares</h2>
     <div class="cards">
 
-      <div class="card card-green section">
-        <div class="card-pct">50%</div>
-        <div class="card-title">Necessidades Essenciais</div>
-        <div class="card-desc">Moradia, alimentação, transporte, saúde e contas fixas. O que você não pode deixar de pagar.</div>
-        <div class="card-bar"><div class="card-bar-fill"></div></div>
+      <div class="card card-green section" id="card1">
+        <div class="card-pct" id="card1Pct">50%</div>
+        <div class="card-title" id="card1Title">Necessidades Essenciais</div>
+        <div class="card-desc" id="card1Desc">Moradia, alimentação, transporte, saúde e contas fixas. O que você não pode deixar de pagar.</div>
+        <div class="card-bar"><div class="card-bar-fill" id="card1Bar" style="width:50%"></div></div>
       </div>
 
-      <div class="card card-blue section">
-        <div class="card-pct">30%</div>
-        <div class="card-title">Estilo de Vida</div>
-        <div class="card-desc">Lazer, restaurantes, streaming, viagens, academia. O que traz qualidade e prazer ao seu dia.</div>
-        <div class="card-bar"><div class="card-bar-fill"></div></div>
+      <div class="card card-blue section" id="card2">
+        <div class="card-pct" id="card2Pct">30%</div>
+        <div class="card-title" id="card2Title">Estilo de Vida</div>
+        <div class="card-desc" id="card2Desc">Lazer, restaurantes, streaming, viagens, academia. O que traz qualidade e prazer ao seu dia.</div>
+        <div class="card-bar"><div class="card-bar-fill" id="card2Bar" style="width:30%"></div></div>
       </div>
 
-      <div class="card card-orange section">
-        <div class="card-pct">20%</div>
-        <div class="card-title">Poupança e Investimentos</div>
-        <div class="card-desc">Reserva de emergência, renda fixa, ações, previdência. O que constrói o seu futuro.</div>
-        <div class="card-bar"><div class="card-bar-fill"></div></div>
+      <div class="card card-orange section" id="card3">
+        <div class="card-pct" id="card3Pct">20%</div>
+        <div class="card-title" id="card3Title">Poupança e Investimentos</div>
+        <div class="card-desc" id="card3Desc">Reserva de emergência, renda fixa, ações, previdência. O que constrói o seu futuro.</div>
+        <div class="card-bar"><div class="card-bar-fill" id="card3Bar" style="width:20%"></div></div>
       </div>
 
     </div>
   </section>
 
-  <!-- GRÁFICO -->
   <section class="section">
     <p class="section-label">Visualização</p>
     <h2 class="section-title">Distribuição da renda</h2>
     <div class="chart-wrapper">
       <div class="chart-box">
-        <canvas id="grafico"></canvas>
+        <div class="chart-canvas-wrap">
+          <canvas id="grafico" role="img" aria-label="Gráfico de pizza mostrando a distribuição percentual da renda entre essenciais, estilo de vida e investimentos">
+            <p id="graficoFallback" class="sr-only">Gráfico mostrando a distribuição de 50% para essenciais, 30% para estilo de vida e 20% para investimentos.</p>
+          </canvas>
+        </div>
       </div>
       <div class="chart-legend">
         <div class="legend-item" data-segment="0">
           <div class="legend-dot" style="background:var(--green)"></div>
           <div class="legend-info">
-            <div class="legend-label">Necessidades essenciais</div>
-            <div class="legend-value">50% da renda</div>
+            <div class="legend-label" id="legLabel1">Necessidades essenciais</div>
+            <div class="legend-value" id="legValue1">50% da renda</div>
             <div class="legend-amount" id="leg-50"></div>
           </div>
         </div>
         <div class="legend-item" data-segment="1">
           <div class="legend-dot" style="background:var(--blue)"></div>
           <div class="legend-info">
-            <div class="legend-label">Estilo de vida</div>
-            <div class="legend-value">30% da renda</div>
+            <div class="legend-label" id="legLabel2">Estilo de vida</div>
+            <div class="legend-value" id="legValue2">30% da renda</div>
             <div class="legend-amount" id="leg-30"></div>
           </div>
         </div>
         <div class="legend-item" data-segment="2">
           <div class="legend-dot" style="background:var(--orange)"></div>
           <div class="legend-info">
-            <div class="legend-label">Poupança e investimentos</div>
-            <div class="legend-value">20% da renda</div>
+            <div class="legend-label" id="legLabel3">Poupança e investimentos</div>
+            <div class="legend-value" id="legValue3">20% da renda</div>
             <div class="legend-amount" id="leg-20"></div>
           </div>
         </div>
@@ -1182,188 +1329,176 @@ footer strong { color: var(--gold); }
     </div>
   </section>
 
-  <!-- SIMULADOR -->
   <section class="section" id="simulador">
     <p class="section-label">Simulador</p>
     <h2 class="section-title">Calcule o seu orçamento</h2>
     <div class="simulator-card">
-      <div class="input-row">
-        <div class="input-group">
-          <span class="input-prefix">R$</span>
-          <input type="number" id="renda" placeholder="Digite sua renda mensal líquida" min="0" step="100" aria-label="Renda mensal líquida">
-          <span class="input-error" id="inputError"></span>
+      <form id="simuladorForm" novalidate>
+        <div class="input-row">
+          <div class="input-group">
+            <span class="input-prefix">R$</span>
+            <input type="text" inputmode="decimal" id="renda" placeholder="Ex: 1500,00" aria-label="Renda mensal líquida">
+            <span class="input-error" id="inputError"></span>
+          </div>
+          <button type="submit" class="btn-calc" id="btnCalc" aria-label="Calcular distribuição">Calcular agora</button>
         </div>
-        <button class="btn-calc" id="btnCalc" onclick="calcular(event)" aria-label="Calcular distribuição">Calcular agora</button>
-      </div>
+      </form>
       <div class="result-grid" id="resultado">
         <div class="result-item r-green">
-          <div class="result-label">Necessidades</div>
-          <div class="result-pct">50%</div>
+          <div class="result-label" id="resLabelA">Necessidades</div>
+          <div class="result-pct" id="resPctA">50%</div>
           <div class="result-val" id="v50">R$ —</div>
-          <div class="result-name">Essenciais</div>
+          <div class="result-name" id="resNameA">Essenciais</div>
+          <div class="spent-row">
+            <label for="spentA">Já gastei</label>
+            <input type="text" inputmode="decimal" id="spentA" placeholder="R$ 0,00" data-pilar="0">
+          </div>
+          <div class="remaining" id="remainingA"></div>
         </div>
         <div class="result-item r-blue">
-          <div class="result-label">Estilo de vida</div>
-          <div class="result-pct">30%</div>
+          <div class="result-label" id="resLabelB">Estilo de vida</div>
+          <div class="result-pct" id="resPctB">30%</div>
           <div class="result-val" id="v30">R$ —</div>
-          <div class="result-name">Pessoal</div>
+          <div class="result-name" id="resNameB">Pessoal</div>
+          <div class="spent-row">
+            <label for="spentB">Já gastei</label>
+            <input type="text" inputmode="decimal" id="spentB" placeholder="R$ 0,00" data-pilar="1">
+          </div>
+          <div class="remaining" id="remainingB"></div>
         </div>
         <div class="result-item r-orange">
-          <div class="result-label">Investimentos</div>
-          <div class="result-pct">20%</div>
+          <div class="result-label" id="resLabelC">Investimentos</div>
+          <div class="result-pct" id="resPctC">20%</div>
           <div class="result-val" id="v20">R$ —</div>
-          <div class="result-name">Futuro</div>
+          <div class="result-name" id="resNameC">Futuro</div>
+          <div class="spent-row">
+            <label for="spentC">Já gastei</label>
+            <input type="text" inputmode="decimal" id="spentC" placeholder="R$ 0,00" data-pilar="2">
+          </div>
+          <div class="remaining" id="remainingC"></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- RESERVA DE EMERGÊNCIA -->
   <section class="section" id="reserva">
-    <p class="section-label">Segurança</p>
-    <h2 class="section-title">Reserva de emergência</h2>
+    <p class="section-label" id="secLabel">Segurança</p>
+    <h2 class="section-title" id="secTitle">Reserva de emergência</h2>
     <div class="emergency-layout">
       <div class="emergency-text">
-        <p>
+        <p id="secText">
           Uma reserva de emergência é a base de qualquer planejamento financeiro sólido.
           Ela protege você de imprevistos sem comprometer seus investimentos.
         </p>
-        <ul class="tip-list">
+        <ul class="tip-list" id="secTips">
           <li>Guarde entre <strong>3 e 6 meses</strong> do seu custo de vida total</li>
           <li>Mantenha em aplicações com <strong>liquidez diária</strong> (CDB D0, Tesouro Selic)</li>
           <li>Priorize a reserva antes de investir em ativos de risco</li>
           <li>Reponha imediatamente após qualquer uso</li>
         </ul>
 
-        <!-- Calculadora de reserva -->
         <div class="reserva-calc">
-          <div class="reserva-calc-title">Calcule sua meta de reserva</div>
+          <div class="reserva-calc-title" id="secCalcTitle">Calcule sua meta de reserva</div>
           <div class="reserva-inputs">
             <div class="reserva-field">
-              <label>Custo de vida mensal</label>
-              <input type="number" id="custoVida" placeholder="R$ 0,00" min="0" step="100" oninput="calcReserva()">
+              <label id="field1Label" for="field1Input">Custo de vida mensal</label>
+              <input type="text" inputmode="decimal" id="field1Input" placeholder="R$ 0,00">
             </div>
             <div class="reserva-field">
-              <label>Perfil de segurança</label>
-              <select id="mesesReserva" onchange="calcReserva()">
-                <option value="3">Mínimo — 3 meses</option>
-                <option value="6" selected>Ideal — 6 meses</option>
-                <option value="12">Conservador — 12 meses</option>
-              </select>
+              <label id="field2Label" for="field2Input">Meses de reserva desejados</label>
+              <input type="text" inputmode="decimal" id="field2Input" placeholder="6">
             </div>
           </div>
           <div class="reserva-result" id="reservaResult">
             <div class="reserva-result-item">
-              <div class="reserva-result-label">Meta total</div>
-              <div class="reserva-result-val" id="reservaMeta">—</div>
-              <div class="reserva-result-sub" id="reservaMeses"></div>
+              <div class="reserva-result-label" id="resultLabel1">Meta total</div>
+              <div class="reserva-result-val" id="resVal1">—</div>
+              <div class="reserva-result-sub" id="resSub1"></div>
             </div>
             <div class="reserva-result-item">
-              <div class="reserva-result-label">Economia mensal sugerida</div>
-              <div class="reserva-result-val" id="reservaMensal">—</div>
-              <div class="reserva-result-sub">para atingir em 12 meses</div>
+              <div class="reserva-result-label" id="resultLabel2">Economia mensal sugerida</div>
+              <div class="reserva-result-val" id="resVal2">—</div>
+              <div class="reserva-result-sub" id="resSub2">para atingir em 12 meses</div>
             </div>
           </div>
         </div>
       </div>
       <div class="chart-box-bar">
-        <canvas id="reservaChart"></canvas>
+        <div class="bar-canvas-wrap">
+          <canvas id="reservaChart" role="img" aria-label="Gráfico de barras mostrando cenários de reserva de emergência">
+            <p id="barFallback" class="sr-only">Gráfico de barras comparando cenários de reserva: mínimo de 3 meses, ideal de 6 meses e conservador de 12 meses de custo de vida.</p>
+          </canvas>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- PASSO A PASSO -->
   <section class="section" id="passos">
     <p class="section-label">Implementação</p>
-    <h2 class="section-title">Como aplicar o método</h2>
-    <div class="accordion">
+    <h2 class="section-title" id="passosTitle">Como aplicar o método</h2>
+    <div class="accordion" id="accordion">
 
       <div class="accordion-item">
-        <div class="accordion-header" onclick="toggleAccordion(this)" aria-expanded="false">
+        <div class="accordion-header" onclick="toggleAccordion(this)" role="button" tabindex="0" aria-expanded="false">
           <div class="accordion-step">1</div>
-          <div class="accordion-title">Calcule sua renda líquida</div>
+          <div class="accordion-title" id="stepTitle1">Calcule sua renda líquida</div>
           <span class="accordion-icon">▾</span>
         </div>
         <div class="accordion-body">
-          <div class="accordion-content">
-            Use apenas o valor que cai na sua conta, após impostos e descontos. Se for autônomo, estime uma média dos últimos 3 meses.
-            <ul>
-              <li>CLT: salário bruto menos INSS e IRRF</li>
-              <li>PJ / MEI: faturamento menos impostos e despesas fixas do negócio</li>
-              <li>Múltiplas fontes: some todos os rendimentos líquidos</li>
-            </ul>
+          <div class="accordion-inner">
+            <div class="accordion-content" id="stepContent1"></div>
           </div>
         </div>
       </div>
 
       <div class="accordion-item">
-        <div class="accordion-header" onclick="toggleAccordion(this)" aria-expanded="false">
+        <div class="accordion-header" onclick="toggleAccordion(this)" role="button" tabindex="0" aria-expanded="false">
           <div class="accordion-step">2</div>
-          <div class="accordion-title">Mapeie seus gastos atuais</div>
+          <div class="accordion-title" id="stepTitle2">Mapeie seus gastos atuais</div>
           <span class="accordion-icon">▾</span>
         </div>
         <div class="accordion-body">
-          <div class="accordion-content">
-            Liste todos os seus gastos do último mês e classifique-os nos três pilares. Use extrato bancário e cartão de crédito como referência.
-            <ul>
-              <li>Aluguel, supermercado, plano de saúde → Essenciais</li>
-              <li>Netflix, restaurantes, academia → Estilo de vida</li>
-              <li>Aplicações, previdência, CDB → Investimentos</li>
-            </ul>
+          <div class="accordion-inner">
+            <div class="accordion-content" id="stepContent2"></div>
           </div>
         </div>
       </div>
 
       <div class="accordion-item">
-        <div class="accordion-header" onclick="toggleAccordion(this)" aria-expanded="false">
+        <div class="accordion-header" onclick="toggleAccordion(this)" role="button" tabindex="0" aria-expanded="false">
           <div class="accordion-step">3</div>
-          <div class="accordion-title">Compare e ajuste</div>
+          <div class="accordion-title" id="stepTitle3">Compare e ajuste</div>
           <span class="accordion-icon">▾</span>
         </div>
         <div class="accordion-body">
-          <div class="accordion-content">
-            Compare seus gastos reais com os valores calculados pelo método. Se os essenciais passam de 50%, identifique o que pode ser reduzido ou renegociado.
-            <ul>
-              <li>Renegocie contratos de internet, plano de celular e seguro</li>
-              <li>Revise assinaturas esquecidas e gastos recorrentes</li>
-              <li>Se necessário, adapte as proporções ao seu momento de vida</li>
-            </ul>
+          <div class="accordion-inner">
+            <div class="accordion-content" id="stepContent3"></div>
           </div>
         </div>
       </div>
 
       <div class="accordion-item">
-        <div class="accordion-header" onclick="toggleAccordion(this)" aria-expanded="false">
+        <div class="accordion-header" onclick="toggleAccordion(this)" role="button" tabindex="0" aria-expanded="false">
           <div class="accordion-step">4</div>
-          <div class="accordion-title">Automatize os investimentos</div>
+          <div class="accordion-title" id="stepTitle4">Automatize os investimentos</div>
           <span class="accordion-icon">▾</span>
         </div>
         <div class="accordion-body">
-          <div class="accordion-content">
-            Configure transferências automáticas no dia do salário para evitar gastar o que deveria ser investido. "Pague-se primeiro."
-            <ul>
-              <li>Programe débito automático para a reserva de emergência</li>
-              <li>Configure aplicação automática em Tesouro Direto ou CDB</li>
-              <li>Considere previdência privada com aportes mensais fixos</li>
-            </ul>
+          <div class="accordion-inner">
+            <div class="accordion-content" id="stepContent4"></div>
           </div>
         </div>
       </div>
 
       <div class="accordion-item">
-        <div class="accordion-header" onclick="toggleAccordion(this)" aria-expanded="false">
+        <div class="accordion-header" onclick="toggleAccordion(this)" role="button" tabindex="0" aria-expanded="false">
           <div class="accordion-step">5</div>
-          <div class="accordion-title">Revise mensalmente</div>
+          <div class="accordion-title" id="stepTitle5">Revise mensalmente</div>
           <span class="accordion-icon">▾</span>
         </div>
         <div class="accordion-body">
-          <div class="accordion-content">
-            Reserve 15 minutos no final do mês para revisar o orçamento. O método é um guia, não uma prisão — ajuste conforme sua realidade evolui.
-            <ul>
-              <li>Anote o que saiu diferente do planejado e o porquê</li>
-              <li>Comemore os meses em que atingiu as metas</li>
-              <li>Aumente o percentual de investimento conforme sua renda cresce</li>
-            </ul>
+          <div class="accordion-inner">
+            <div class="accordion-content" id="stepContent5"></div>
           </div>
         </div>
       </div>
@@ -1375,203 +1510,518 @@ footer strong { color: var(--gold); }
 
 <footer>
   <div class="footer-links">
-    <a href="#inicio">Início</a>
-    <a href="#metodo">O Método</a>
-    <a href="#simulador">Simulador</a>
-    <a href="#reserva">Reserva</a>
-    <a href="#passos">Passo a passo</a>
+    <a data-target="inicio" href="#inicio">Início</a>
+    <a data-target="metodo" href="#metodo">O Método</a>
+    <a data-target="simulador" href="#simulador">Simulador</a>
+    <a data-target="reserva" href="#reserva">Reserva</a>
+    <a data-target="passos" href="#passos">Passo a passo</a>
   </div>
   Feito com propósito · <strong>Educação Financeira</strong>
 </footer>
 
-<!-- TOAST -->
 <div class="toast" id="toast" role="alert" aria-live="polite">
   <span class="toast-icon" id="toastIcon">✓</span>
   <span class="toast-text" id="toastText"></span>
 </div>
 
 <script>
-// ─── THEME TOGGLE ───
+const MODES = {
+  ok: {
+    hash: '',
+    pageTitle: 'Método 50·30·20 — Controle Financeiro',
+    navLogo: '50·30·20',
+    badge: 'Finanças Pessoais',
+    title: 'Método<br>50 · 30 · 20',
+    subtitle: 'Uma regra simples para organizar sua renda, construir reservas e investir no futuro.',
+    heroStats: ['Essenciais', 'Bem-estar', 'Futuro'],
+    pcts: [50, 30, 20],
+    metodoLabel: 'Conceito',
+    methodText: 'Divida sua renda líquida em três grandes blocos: metade cobre o essencial da vida, um terço financia seus momentos e bem-estar, e o restante constrói seu patrimônio e segurança. Simples, direto e eficaz.',
+    pilaresTitle: 'Os três pilares',
+    cards: [
+      { title: 'Necessidades Essenciais', desc: 'Moradia, alimentação, transporte, saúde e contas fixas. O que você não pode deixar de pagar.' },
+      { title: 'Estilo de Vida', desc: 'Lazer, restaurantes, streaming, viagens, academia. O que traz qualidade e prazer ao seu dia.' },
+      { title: 'Poupança e Investimentos', desc: 'Reserva de emergência, renda fixa, ações, previdência. O que constrói o seu futuro.' }
+    ],
+    chartLabelsSuffix: ['Essenciais', 'Estilo de vida', 'Investimentos'],
+    legend: [ { label: 'Necessidades essenciais' }, { label: 'Estilo de vida' }, { label: 'Poupança e investimentos' } ],
+    resultLabels: ['Necessidades', 'Estilo de vida', 'Investimentos'],
+    resultNames: ['Essenciais', 'Pessoal', 'Futuro'],
+    secLabel: 'Segurança',
+    secTitle: 'Reserva de emergência',
+    secText: 'Uma reserva de emergência é a base de qualquer planejamento financeiro sólido. Ela protege você de imprevistos sem comprometer seus investimentos.',
+    secTips: [
+      'Guarde entre <strong>3 e 6 meses</strong> do seu custo de vida total',
+      'Mantenha em aplicações com <strong>liquidez diária</strong> (CDB D0, Tesouro Selic)',
+      'Priorize a reserva antes de investir em ativos de risco',
+      'Reponha imediatamente após qualquer uso'
+    ],
+    secCalcTitle: 'Calcule sua meta de reserva',
+    field1Label: 'Custo de vida mensal',
+    field1Placeholder: 'R$ 0,00',
+    field2Label: 'Meses de reserva desejados',
+    field2Placeholder: '6',
+    field2Mask: 'number',
+    resultLabel1: 'Meta total',
+    resultLabel2: 'Economia mensal sugerida',
+    calcType: 'reserve',
+    barLabels: ['Mínimo (3 meses)', 'Ideal (6 meses)', 'Conservador (12 meses)'],
+    barData: [3, 6, 12],
+    barSuffix: 'm',
+    barTooltip: 'meses de custo de vida',
+    barFallback: 'Gráfico de barras comparando cenários de reserva: mínimo de 3 meses, ideal de 6 meses e conservador de 12 meses de custo de vida.',
+    passosTitle: 'Como aplicar o método',
+    steps: [
+      { title: 'Calcule sua renda líquida', content: 'Use apenas o valor que cai na sua conta, após impostos e descontos. Se for autônomo, estime uma média dos últimos 3 meses.<ul><li>CLT: salário bruto menos INSS e IRRF</li><li>PJ / MEI: faturamento menos impostos e despesas fixas do negócio</li><li>Múltiplas fontes: some todos os rendimentos líquidos</li></ul>' },
+      { title: 'Mapeie seus gastos atuais', content: 'Liste todos os seus gastos do último mês e classifique-os nos três pilares. Use extrato bancário e cartão de crédito como referência.<ul><li>Aluguel, supermercado, plano de saúde → Essenciais</li><li>Netflix, restaurantes, academia → Estilo de vida</li><li>Aplicações, previdência, CDB → Investimentos</li></ul>' },
+      { title: 'Compare e ajuste', content: 'Compare seus gastos reais com os valores calculados pelo método. Se os essenciais passam de 50%, identifique o que pode ser reduzido ou renegociado.<ul><li>Renegocie contratos de internet, plano de celular e seguro</li><li>Revise assinaturas esquecidas e gastos recorrentes</li><li>Se necessário, adapte as proporções ao seu momento de vida</li></ul>' },
+      { title: 'Automatize os investimentos', content: 'Configure transferências automáticas no dia do salário para evitar gastar o que deveria ser investido. "Pague-se primeiro."<ul><li>Programe débito automático para a reserva de emergência</li><li>Configure aplicação automática em Tesouro Direto ou CDB</li><li>Considere previdência privada com aportes mensais fixos</li></ul>' },
+      { title: 'Revise mensalmente', content: 'Reserve 15 minutos no final do mês para revisar o orçamento. O método é um guia, não uma prisão — ajuste conforme sua realidade evolui.<ul><li>Anote o que saiu diferente do planejado e o porquê</li><li>Comemore os meses em que atingiu as metas</li><li>Aumente o percentual de investimento conforme sua renda cresce</li></ul>' }
+    ]
+  },
+  d: {
+    hash: '504010',
+    pageTitle: 'Método 50·40·10 — Saindo das Dívidas',
+    navLogo: '50·40·10',
+    badge: 'Saindo das Dívidas',
+    title: 'Método<br>50 · 40 · 10',
+    subtitle: 'Uma rota objetiva para quem está endividado: estabilize o essencial, ataque as dívidas e mantenha uma reserva mínima.',
+    heroStats: ['Essenciais', 'Quitação', 'Reserva'],
+    pcts: [50, 40, 10],
+    metodoLabel: 'Conceito',
+    methodText: 'Enquanto você está endividado, o foco muda: metade da renda cobre o essencial, a maior fatia vai para quitar dívidas (começando pelas de maior juros) e uma reserva mínima evita que um imprevisto vire uma nova dívida.',
+    pilaresTitle: 'Os três pilares',
+    cards: [
+      { title: 'Necessidades Essenciais', desc: 'Moradia, alimentação, transporte, saúde e contas fixas. O mínimo para viver com dignidade enquanto você se reorganiza.' },
+      { title: 'Quitação de Dívidas', desc: 'Cartão de crédito, cheque especial, empréstimos e financiamentos. Priorize sempre as dívidas com os juros mais altos.' },
+      { title: 'Reserva Mínima', desc: 'Um colchão pequeno para imprevistos, evitando criar novas dívidas enquanto você quita as atuais.' }
+    ],
+    chartLabelsSuffix: ['Essenciais', 'Quitação de dívidas', 'Reserva'],
+    legend: [ { label: 'Necessidades essenciais' }, { label: 'Quitação de dívidas' }, { label: 'Reserva mínima' } ],
+    resultLabels: ['Necessidades', 'Quitação', 'Reserva'],
+    resultNames: ['Essenciais', 'Dívidas', 'Segurança'],
+    secLabel: 'Prioridade',
+    secTitle: 'Quitação de dívidas',
+    secText: 'Liste todas as suas dívidas com o valor devido e a taxa de juros. Ataque primeiro a de maior juros (método avalanche) enquanto paga o mínimo nas demais.',
+    secTips: [
+      'Negocie taxas e prazos antes de mais nada — juros menores aceleram tudo',
+      'Use o <strong>método avalanche</strong>: quite primeiro quem cobra mais juros',
+      'Evite novos cartões, parcelamentos ou empréstimos nesse período',
+      'Direcione qualquer renda extra (13º, bônus) para acelerar a quitação'
+    ],
+    secCalcTitle: 'Calcule o tempo para quitar sua dívida',
+    field1Label: 'Valor total da dívida',
+    field1Placeholder: 'R$ 0,00',
+    field2Label: 'Pagamento mensal disponível',
+    field2Placeholder: 'R$ 0,00',
+    field2Mask: 'currency',
+    resultLabel1: 'Tempo estimado',
+    resultLabel2: 'Total pago no período',
+    calcType: 'debt',
+    barLabels: ['Só o mínimo', '+10% de esforço extra', '+25% de esforço extra'],
+    barData: [24, 16, 10],
+    barSuffix: 'm',
+    barTooltip: 'meses estimados (exemplo ilustrativo)',
+    barFallback: 'Gráfico de barras ilustrando como o esforço extra reduz o tempo de quitação de dívidas.',
+    passosTitle: 'Como sair das dívidas',
+    steps: [
+      { title: 'Liste todas as suas dívidas', content: 'Anote credor, valor devido, taxa de juros e vencimento de cada dívida. Sem essa visão completa, é impossível priorizar.<ul><li>Cartão de crédito e cheque especial primeiro (juros mais altos)</li><li>Empréstimos pessoais e financiamentos em seguida</li><li>Não esqueça dívidas informais com familiares ou amigos</li></ul>' },
+      { title: 'Negocie antes de pagar', content: 'Ligue para os credores e negocie taxas, prazos ou descontos à vista. Uma taxa menor reduz o tempo total de quitação.<ul><li>Peça portabilidade de dívida para taxas menores</li><li>Negocie descontos para pagamento à vista quando possível</li><li>Evite parcelar a negociação em mais juros</li></ul>' },
+      { title: 'Aplique o método avalanche', content: 'Pague o mínimo em todas as dívidas, exceto na de maior juros — nela, coloque todo o valor disponível para quitação (40% da renda).<ul><li>Quitou a primeira? Direcione o valor total para a próxima</li><li>O efeito "bola de neve" acelera a cada dívida quitada</li><li>Mantenha o controle visual do progresso para se manter motivado</li></ul>' },
+      { title: 'Corte gastos temporariamente', content: 'Enquanto quita as dívidas, reduza ao máximo os 50% de essenciais e evite qualquer gasto fora do orçamento.<ul><li>Renegocie assinaturas, planos e contas fixas</li><li>Evite novos cartões ou parcelamentos nesse período</li><li>Direcione 13º, restituição de IR e bônus para a quitação</li></ul>' },
+      { title: 'Migre para o próximo estágio', content: 'Assim que quitar as dívidas de juros altos, redistribua o percentual de "quitação" para reserva e investimentos.<ul><li>Construa a reserva de emergência completa (3 a 6 meses)</li><li>Comece a investir aos poucos com o percentual liberado</li><li>Evite recair no mesmo padrão que gerou as dívidas</li></ul>' }
+    ]
+  },
+  l: {
+    hash: '302050',
+    pageTitle: 'Método 30·20·50 — Independência Financeira',
+    navLogo: '30·20·50',
+    badge: 'Independência Financeira',
+    title: 'Método<br>30 · 20 · 50',
+    subtitle: 'Para quem já tem as contas em dia: reduza o essencial, mantenha o estilo de vida sob controle e acelere os investimentos.',
+    heroStats: ['Essenciais', 'Gastos', 'Investimento'],
+    pcts: [30, 20, 50],
+    metodoLabel: 'Conceito',
+    methodText: 'Com a base financeira estável, o jogo muda: essenciais enxutos, um espaço confortável para aproveitar a vida e metade da renda acelerando investimentos rumo à independência financeira.',
+    pilaresTitle: 'Os três pilares',
+    cards: [
+      { title: 'Necessidades Essenciais', desc: 'Moradia, alimentação, transporte, saúde e contas fixas — mantidas enxutas para abrir espaço aos investimentos.' },
+      { title: 'Gastos e Estilo de Vida', desc: 'Lazer, restaurantes, viagens e hobbies. Aproveitar a vida sem comprometer a independência.' },
+      { title: 'Investimentos', desc: 'Renda fixa, ações, fundos imobiliários e previdência. O motor da sua independência financeira.' }
+    ],
+    chartLabelsSuffix: ['Essenciais', 'Gastos', 'Investimentos'],
+    legend: [ { label: 'Necessidades essenciais' }, { label: 'Gastos e estilo de vida' }, { label: 'Investimentos' } ],
+    resultLabels: ['Necessidades', 'Gastos', 'Investimentos'],
+    resultNames: ['Essenciais', 'Estilo de vida', 'Independência'],
+    secLabel: 'Meta',
+    secTitle: 'Independência financeira',
+    secText: 'Independência financeira é o ponto em que a renda gerada pelos seus investimentos cobre o seu custo de vida. Uma referência comum é a regra dos 4%.',
+    secTips: [
+      '<strong>Regra dos 4%:</strong> seu patrimônio-alvo é ~25x o seu gasto anual',
+      'Diversifique entre renda fixa, ações e fundos imobiliários',
+      'Reinvista os proventos para acelerar o efeito bola de neve',
+      'Revise sua taxa de retirada conforme o patrimônio cresce'
+    ],
+    secCalcTitle: 'Calcule seu patrimônio-alvo (regra dos 4%)',
+    field1Label: 'Gasto mensal atual',
+    field1Placeholder: 'R$ 0,00',
+    field2Label: 'Taxa de retirada anual (%)',
+    field2Placeholder: '4',
+    field2Mask: 'number',
+    resultLabel1: 'Patrimônio-alvo',
+    resultLabel2: 'Renda mensal estimada',
+    calcType: 'fire',
+    barLabels: ['Conservador (3% a.a.)', 'Moderado (4% a.a.)', 'Agressivo (6% a.a.)'],
+    barData: [30, 22, 15],
+    barSuffix: 'a',
+    barTooltip: 'anos estimados até a independência (exemplo ilustrativo)',
+    barFallback: 'Gráfico de barras comparando anos estimados até a independência financeira conforme a taxa de retirada escolhida.',
+    passosTitle: 'Como acelerar sua independência',
+    steps: [
+      { title: 'Defina seu número mágico', content: 'Calcule quanto patrimônio você precisa para viver da renda dos investimentos, usando a regra dos 4% como referência.<ul><li>Patrimônio-alvo ≈ gasto mensal × 12 ÷ 4%</li><li>Ajuste a taxa conforme seu perfil de risco e prazo</li><li>Revise a meta a cada mudança relevante no seu custo de vida</li></ul>' },
+      { title: 'Mantenha os essenciais enxutos', content: 'Com 30% para essenciais, cada redução aqui acelera diretamente sua independência — sem abrir mão de qualidade de vida básica.<ul><li>Revise moradia, transporte e contas fixas periodicamente</li><li>Evite "inflação de estilo de vida" ao ganhar mais</li><li>Direcione qualquer economia extra para investimentos</li></ul>' },
+      { title: 'Diversifique os investimentos', content: 'Distribua os 50% entre classes de ativos diferentes para equilibrar risco e retorno ao longo do tempo.<ul><li>Renda fixa para estabilidade e liquidez</li><li>Ações e fundos imobiliários para crescimento e renda passiva</li><li>Previdência privada para benefícios fiscais de longo prazo</li></ul>' },
+      { title: 'Automatize e reinvista', content: 'Configure aportes automáticos e reinvista todos os proventos e dividendos para maximizar o efeito bola de neve.<ul><li>Aporte no dia do salário, antes de qualquer outro gasto</li><li>Reinvista dividendos e juros ao invés de sacar</li><li>Aumente o aporte a cada reajuste salarial</li></ul>' },
+      { title: 'Acompanhe sua taxa de retirada', content: 'Revise anualmente se seu patrimônio ainda sustenta sua taxa de retirada planejada, ajustando o ritmo se necessário.<ul><li>Recalcule o patrimônio-alvo a cada 6-12 meses</li><li>Considere uma taxa mais conservadora perto da meta</li><li>Celebre marcos: 25%, 50%, 75% e 100% do objetivo</li></ul>' }
+    ]
+  }
+};
+
+let currentMode = 'ok';
+
+/* ROTEAMENTO POR HASH */
+function modeKeyFromHash(part) {
+  if (part === MODES.d.hash) return 'd';
+  if (part === MODES.l.hash) return 'l';
+  return null;
+}
+function parseLocationHash() {
+  const raw = location.hash.replace(/^#/, '');
+  if (!raw) return { mode: 'ok', anchor: null };
+  const parts = raw.split('#').filter(Boolean);
+  const maybeMode = modeKeyFromHash(parts[0]);
+  if (maybeMode) return { mode: maybeMode, anchor: parts[1] || null };
+  return { mode: 'ok', anchor: parts[0] };
+}
+function buildHash(mode, anchor) {
+  const prefix = MODES[mode].hash;
+  if (!anchor) return prefix ? '#' + prefix : '#inicio';
+  return prefix ? '#' + prefix + '#' + anchor : '#' + anchor;
+}
+function updateNavHrefs() {
+  document.querySelectorAll('[data-target]').forEach(a => {
+    a.setAttribute('href', buildHash(currentMode, a.getAttribute('data-target')));
+  });
+}
+function applyHash(mode, opts) {
+  const hash = buildHash(mode, opts.anchor);
+  if (location.hash !== hash) history.pushState(null, '', hash);
+}
+window.addEventListener('hashchange', () => {
+  const { mode, anchor } = parseLocationHash();
+  setMode(mode, { scrollTo: anchor, fromHash: true });
+});
+
+/* MÁSCARA DE MOEDA / NÚMERO */
+function maskInput(el, type) {
+  el.oninput = () => {
+    let raw = el.value.replace(/\D/g, '');
+    if (!raw) { el.value = ''; return; }
+    if (type === 'currency') {
+      let v = (parseInt(raw, 10) / 100).toFixed(2);
+      let [int, dec] = v.split('.');
+      int = int.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      el.value = int + ',' + dec;
+    } else {
+      el.value = raw.replace(/^0+(?=\d)/, '');
+    }
+  };
+}
+function parseMasked(el, type) {
+  if (type === 'currency') {
+    const raw = el.value.replace(/\./g, '').replace(',', '.');
+    return parseFloat(raw) || 0;
+  }
+  return parseFloat(el.value) || 0;
+}
+maskInput(document.getElementById('renda'), 'currency');
+['spentA', 'spentB', 'spentC'].forEach(id => maskInput(document.getElementById(id), 'currency'));
+maskInput(document.getElementById('field1Input'), 'currency');
+
+function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+function setHTML(id, html) { const el = document.getElementById(id); if (el) el.innerHTML = html; }
+
+function setMode(mode, opts) {
+  opts = opts || {};
+  if (!MODES[mode]) mode = 'ok';
+  currentMode = mode;
+  localStorage.setItem('activeMode', mode);
+  const m = MODES[mode];
+
+  document.getElementById('pageTitle').textContent = m.pageTitle;
+  document.title = m.pageTitle;
+  setText('navLogo', m.navLogo);
+  setText('heroBadge', m.badge);
+  setHTML('heroTitle', m.title);
+  setText('heroSubtitle', m.subtitle);
+  setText('heroStatNum1', m.pcts[0] + '%');
+  setText('heroStatLabel1', m.heroStats[0]);
+  setText('heroStatNum2', m.pcts[1] + '%');
+  setText('heroStatLabel2', m.heroStats[1]);
+  setText('heroStatNum3', m.pcts[2] + '%');
+  setText('heroStatLabel3', m.heroStats[2]);
+
+  setText('metodoLabel', m.metodoLabel);
+  setText('methodText', m.methodText);
+  setText('pilaresTitle', m.pilaresTitle);
+
+  ['1', '2', '3'].forEach((n, i) => {
+    setText('card' + n + 'Pct', m.pcts[i] + '%');
+    setText('card' + n + 'Title', m.cards[i].title);
+    setText('card' + n + 'Desc', m.cards[i].desc);
+    const bar = document.getElementById('card' + n + 'Bar');
+    if (bar) bar.style.width = m.pcts[i] + '%';
+  });
+
+  setText('legLabel1', m.legend[0].label);
+  setText('legValue1', m.pcts[0] + '% da renda');
+  setText('legLabel2', m.legend[1].label);
+  setText('legValue2', m.pcts[1] + '% da renda');
+  setText('legLabel3', m.legend[2].label);
+  setText('legValue3', m.pcts[2] + '% da renda');
+  setText('leg-50', ''); setText('leg-30', ''); setText('leg-20', '');
+  setText('graficoFallback', 'Gráfico mostrando a distribuição de ' + m.pcts[0] + '% para ' + m.chartLabelsSuffix[0].toLowerCase() + ', ' + m.pcts[1] + '% para ' + m.chartLabelsSuffix[1].toLowerCase() + ' e ' + m.pcts[2] + '% para ' + m.chartLabelsSuffix[2].toLowerCase() + '.');
+  document.getElementById('grafico').setAttribute('aria-label', 'Gráfico de pizza mostrando a distribuição percentual da renda entre ' + m.chartLabelsSuffix.join(', ').toLowerCase());
+
+  setText('resLabelA', m.resultLabels[0]);
+  setText('resPctA', m.pcts[0] + '%');
+  setText('resNameA', m.resultNames[0]);
+  setText('resLabelB', m.resultLabels[1]);
+  setText('resPctB', m.pcts[1] + '%');
+  setText('resNameB', m.resultNames[1]);
+  setText('resLabelC', m.resultLabels[2]);
+  setText('resPctC', m.pcts[2] + '%');
+  setText('resNameC', m.resultNames[2]);
+  document.getElementById('v50').textContent = 'R$ —';
+  document.getElementById('v30').textContent = 'R$ —';
+  document.getElementById('v20').textContent = 'R$ —';
+  document.getElementById('resultado').classList.remove('show');
+  lastAllocations = [0, 0, 0];
+  loadGastos(mode);
+
+  setText('secLabel', m.secLabel);
+  setText('secTitle', m.secTitle);
+  setText('secText', m.secText);
+  setHTML('secTips', m.secTips.map(t => '<li>' + t + '</li>').join(''));
+  setText('secCalcTitle', m.secCalcTitle);
+  setText('field1Label', m.field1Label);
+  document.getElementById('field1Input').placeholder = m.field1Placeholder;
+  setText('field2Label', m.field2Label);
+  const field2 = document.getElementById('field2Input');
+  field2.placeholder = m.field2Placeholder;
+  maskInput(field2, m.field2Mask);
+  setText('resultLabel1', m.resultLabel1);
+  setText('resultLabel2', m.resultLabel2);
+  document.getElementById('field1Input').value = '';
+  field2.value = '';
+  document.getElementById('resVal1').textContent = '—';
+  document.getElementById('resVal2').textContent = '—';
+  document.getElementById('resSub1').textContent = '';
+  document.getElementById('resSub2').textContent = '';
+  document.getElementById('reservaResult').classList.remove('show');
+  setText('barFallback', m.barFallback);
+
+  setText('passosTitle', m.passosTitle);
+  m.steps.forEach((s, i) => {
+    setText('stepTitle' + (i + 1), s.title);
+    setHTML('stepContent' + (i + 1), s.content);
+  });
+  document.querySelectorAll('.accordion-item.open').forEach(item => {
+    item.classList.remove('open');
+    item.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
+  });
+
+  updateDonutChart(m);
+  updateBarChart(m);
+
+  updateNavHrefs();
+  document.querySelectorAll('.version-pill').forEach(p => {
+    p.classList.toggle('active', p.getAttribute('data-mode') === mode);
+  });
+
+  if (!opts.fromHash) applyHash(mode, { anchor: opts.anchor });
+
+  // Se já havia uma renda digitada, recalcula automaticamente para o novo perfil
+  const valorRenda = parseMasked(document.getElementById('renda'), 'currency');
+  if (valorRenda > 0) calcular();
+
+  if (opts.scrollTo) {
+    requestAnimationFrame(() => {
+      const target = document.getElementById(opts.scrollTo);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+}
+
+/* NAVEGAÇÃO */
+document.querySelectorAll('[data-target]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const anchor = a.getAttribute('data-target');
+    setMode(currentMode, { anchor });
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  });
+});
+document.querySelectorAll('.version-pill').forEach(btn => {
+  btn.addEventListener('click', () => setMode(btn.getAttribute('data-mode'), {}));
+});
+
+/* THEME TOGGLE */
 const root = document.documentElement;
 const toggle = document.getElementById('themeToggle');
 let dark = true;
-
 function setTheme(isDark) {
   dark = isDark;
   root.setAttribute('data-theme', isDark ? 'dark' : 'light');
   toggle.textContent = isDark ? '🌙' : '☀️';
-  if (donutChart) updateChartColors();
-  if (barChart) updateBarColors();
+  updateChartColors();
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
 }
-
 toggle.addEventListener('click', () => setTheme(!dark));
-
-// Restore saved preference
 const saved = localStorage.getItem('theme');
 if (saved) setTheme(saved === 'dark');
 
-// ─── MOBILE MENU ───
+/* MOBILE MENU */
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
-
 hamburger.addEventListener('click', () => {
   const open = mobileMenu.classList.toggle('open');
   hamburger.classList.toggle('open');
   hamburger.setAttribute('aria-expanded', open);
 });
 
-document.querySelectorAll('.mobile-menu a').forEach(a => {
-  a.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    hamburger.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-  });
-});
-
-// ─── SCROLL PROGRESS ───
+/* SCROLL PROGRESS + NAV ATIVO */
 window.addEventListener('scroll', () => {
   const el = document.getElementById('scrollLine');
   const progress = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
   el.style.width = progress + '%';
   updateActiveNav();
 });
-
-// ─── ACTIVE NAV LINK ───
 function updateActiveNav() {
-  const sections = ['inicio','metodo','pilares','simulador','reserva','passos'];
+  const sections = ['inicio', 'metodo', 'pilares', 'simulador', 'reserva', 'passos'];
   let current = '';
   sections.forEach(id => {
     const el = document.getElementById(id);
-    if (el && el.getBoundingClientRect().top <= 100) current = id;
+    if (el && el.getBoundingClientRect().top <= 120) current = id;
   });
   document.querySelectorAll('.nav-links a').forEach(a => {
-    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    a.classList.toggle('active', a.getAttribute('data-target') === current);
   });
 }
 
-// ─── INTERSECTION OBSERVER ───
+/* INTERSECTION OBSERVER */
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.12 });
-
 document.querySelectorAll('.section').forEach(sec => observer.observe(sec));
 
-// ─── CHART COLORS ───
 function getCSSVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
+function hexToRgba(hex, alpha) {
+  const h = hex.replace('#', '');
+  const bigint = parseInt(h.length === 3 ? h.split('').map(c => c + c).join('') : h, 16);
+  const r = (bigint >> 16) & 255, g = (bigint >> 8) & 255, b = bigint & 255;
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+}
 
-// ─── CHART: DONUT ───
-let donutChart;
-donutChart = new Chart(document.getElementById('grafico'), {
+/* GRÁFICO DE PIZZA */
+let donutChart = new Chart(document.getElementById('grafico'), {
   type: 'doughnut',
   data: {
     labels: ['Essenciais 50%', 'Estilo de vida 30%', 'Investimentos 20%'],
-    datasets: [{
-      data: [50, 30, 20],
-      backgroundColor: ['#3ecf74', '#4d9ef7', '#f7924d'],
-      borderColor: '#111318',
-      borderWidth: 4,
-      hoverOffset: 10
-    }]
+    datasets: [{ data: [50, 30, 20], backgroundColor: ['#3ecf74', '#4d9ef7', '#f7924d'], borderColor: '#111318', borderWidth: 4, hoverOffset: 10 }]
   },
   options: {
     cutout: '72%',
+    maintainAspectRatio: true,
     plugins: {
       legend: { display: false },
-      tooltip: {
-        backgroundColor: '#181c24',
-        borderColor: 'rgba(255,255,255,0.08)',
-        borderWidth: 1,
-        titleColor: '#e8eaf0',
-        bodyColor: '#6b7280',
-        padding: 12,
-        cornerRadius: 10
-      }
+      tooltip: { backgroundColor: '#181c24', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#6b7280', padding: 12, cornerRadius: 10 }
     },
-    animation: { animateScale: true, duration: 1400, easing: 'easeOutQuart' },
+    animation: { animateScale: true, duration: 1000, easing: 'easeOutQuart' },
     onClick(evt, elements) {
       if (elements.length > 0) {
-        const msgs = ['Essenciais: aluguel, mercado, saúde e transporte.', 'Estilo de vida: lazer, restaurantes e bem-estar.', 'Investimentos: reserva, renda fixa e ações.'];
-        showToast('💡', msgs[elements[0].index]);
+        const m = MODES[currentMode];
+        showToast('💡', m.cards[elements[0].index].desc);
       }
     }
   }
 });
+function updateDonutChart(m) {
+  donutChart.data.labels = m.chartLabelsSuffix.map((l, i) => l + ' ' + m.pcts[i] + '%');
+  donutChart.data.datasets[0].data = m.pcts;
+  donutChart.update();
+}
 
-// ─── CHART: BAR ───
-let barChart;
-barChart = new Chart(document.getElementById('reservaChart'), {
+/* GRÁFICO DE BARRAS */
+let currentBarSuffix = 'm';
+let currentBarTooltip = 'meses de custo de vida';
+let barChart = new Chart(document.getElementById('reservaChart'), {
   type: 'bar',
   data: {
-    labels: ['Mínimo\n(3 meses)', 'Ideal\n(6 meses)', 'Conservador\n(12 meses)'],
-    datasets: [{
-      label: 'Meses de custo de vida',
-      data: [3, 6, 12],
-      backgroundColor: ['rgba(201,168,76,0.3)', 'rgba(201,168,76,0.65)', 'rgba(201,168,76,0.95)'],
-      borderColor: ['#c9a84c', '#c9a84c', '#c9a84c'],
-      borderWidth: 1,
-      borderRadius: 8,
-      borderSkipped: false
-    }]
+    labels: ['Mínimo (3 meses)', 'Ideal (6 meses)', 'Conservador (12 meses)'],
+    datasets: [{ label: 'Cenário', data: [3, 6, 12], backgroundColor: [], borderColor: [], borderWidth: 1, borderRadius: 8, borderSkipped: false }]
   },
   options: {
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#181c24',
-        borderColor: 'rgba(255,255,255,0.08)',
-        borderWidth: 1,
-        titleColor: '#e8eaf0',
-        bodyColor: '#6b7280',
-        padding: 12,
-        cornerRadius: 10,
-        callbacks: {
-          label: ctx => ` ${ctx.parsed.y} meses de custo de vida`
-        }
+        backgroundColor: '#181c24', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#6b7280', padding: 12, cornerRadius: 10,
+        callbacks: { label: ctx => ' ' + ctx.parsed.y + ' ' + currentBarTooltip }
       }
     },
     scales: {
-      x: {
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 } }
-      },
-      y: {
-        beginAtZero: true,
-        max: 14,
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        ticks: {
-          color: '#6b7280',
-          font: { family: 'DM Sans', size: 12 },
-          callback: v => v + 'm'
-        }
-      }
+      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 } } },
+      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 }, callback: v => v + currentBarSuffix } }
     },
-    animation: { duration: 1400, easing: 'easeOutQuart' }
+    animation: { duration: 1000, easing: 'easeOutQuart' }
   }
 });
+function updateBarChart(m) {
+  currentBarSuffix = m.barSuffix;
+  currentBarTooltip = m.barTooltip;
+  barChart.data.labels = m.barLabels;
+  barChart.data.datasets[0].data = m.barData;
+  const max = Math.max(...m.barData);
+  barChart.options.scales.y.max = Math.ceil(max * 1.15);
+  updateChartColors();
+}
 
+/* CORES DINÂMICAS CONFORME O TEMA (usa getCSSVar para não travar em hex fixo) */
 function updateChartColors() {
-  const surface = getCSSVar('--surface');
-  donutChart.data.datasets[0].borderColor = surface || '#111318';
+  const surface = getCSSVar('--surface') || '#111318';
+  const green = getCSSVar('--green') || '#3ecf74';
+  const blue = getCSSVar('--blue') || '#4d9ef7';
+  const orange = getCSSVar('--orange') || '#f7924d';
+  const gold = getCSSVar('--gold') || '#c9a84c';
+
+  donutChart.data.datasets[0].backgroundColor = [green, blue, orange];
+  donutChart.data.datasets[0].borderColor = surface;
   donutChart.update();
-}
-function updateBarColors() {
-  // bar chart is gold-based and works across themes
+
+  barChart.data.datasets[0].backgroundColor = [hexToRgba(gold, 0.3), hexToRgba(gold, 0.65), hexToRgba(gold, 0.95)];
+  barChart.data.datasets[0].borderColor = [gold, gold, gold];
+  barChart.update();
 }
 
-// ─── LEGEND HOVER ───
+/* HOVER DA LEGENDA */
 document.querySelectorAll('.legend-item').forEach((item, i) => {
   item.addEventListener('mouseenter', () => {
-    donutChart.setDatasetVisibility(0, true);
-    donutChart.data.datasets[0].hoverOffset = 14;
-    donutChart.update();
-    donutChart.tooltip.setActiveElements([{datasetIndex:0,index:i}], {x:0,y:0});
+    donutChart.tooltip.setActiveElements([{ datasetIndex: 0, index: i }], { x: 0, y: 0 });
     donutChart.update();
   });
   item.addEventListener('mouseleave', () => {
@@ -1580,15 +2030,67 @@ document.querySelectorAll('.legend-item').forEach((item, i) => {
   });
 });
 
-// ─── SIMULATOR ───
-let lastRenda = 0;
+/* SIMULADOR PRINCIPAL — agora dentro de um <form>, Enter funciona nativamente */
+document.getElementById('simuladorForm').addEventListener('submit', e => {
+  e.preventDefault();
+  calcular(e);
+});
+
+/* GASTOS POR PILAR — persistidos por perfil (mode) no localStorage */
+let lastAllocations = [0, 0, 0];
+const SPENT_IDS = ['spentA', 'spentB', 'spentC'];
+const REMAINING_IDS = ['remainingA', 'remainingB', 'remainingC'];
+
+function loadGastos(mode) {
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem('gastos_' + mode) || '[]'); } catch (e) { saved = []; }
+  SPENT_IDS.forEach((id, i) => {
+    document.getElementById(id).value = saved[i] || '';
+  });
+  updateRemaining();
+}
+
+function saveGastos() {
+  const values = SPENT_IDS.map(id => document.getElementById(id).value);
+  localStorage.setItem('gastos_' + currentMode, JSON.stringify(values));
+}
+
+function updateRemaining() {
+  const fmt = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  SPENT_IDS.forEach((id, i) => {
+    const spent = parseMasked(document.getElementById(id), 'currency');
+    const el = document.getElementById(REMAINING_IDS[i]);
+    const allocated = lastAllocations[i];
+    if (!allocated || (!spent && spent !== 0)) { el.textContent = ''; el.className = 'remaining'; return; }
+    const restante = allocated - spent;
+    if (restante < 0) {
+      el.textContent = 'Estourou em ' + fmt(Math.abs(restante));
+      el.className = 'remaining over';
+    } else if (spent > 0 && restante < allocated * 0.15) {
+      el.textContent = 'Restam ' + fmt(restante);
+      el.className = 'remaining warn';
+    } else if (spent > 0) {
+      el.textContent = 'Restam ' + fmt(restante);
+      el.className = 'remaining ok';
+    } else {
+      el.textContent = '';
+      el.className = 'remaining';
+    }
+  });
+}
+
+SPENT_IDS.forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    saveGastos();
+    updateRemaining();
+  });
+});
 
 function calcular(e) {
   const input = document.getElementById('renda');
   const errEl = document.getElementById('inputError');
-  const renda = parseFloat(input.value);
+  const renda = parseMasked(input, 'currency');
 
-  // Validation
   if (!renda || renda <= 0) {
     input.classList.add('error');
     errEl.textContent = 'Insira um valor positivo.';
@@ -1598,25 +2100,26 @@ function calcular(e) {
   input.classList.remove('error');
   errEl.textContent = '';
 
+  localStorage.setItem('lastRenda', input.value);
+
   ripple(e);
-  lastRenda = renda;
 
-  const r50 = renda * 0.5;
-  const r30 = renda * 0.3;
-  const r20 = renda * 0.2;
+  const m = MODES[currentMode];
+  const r1 = renda * m.pcts[0] / 100;
+  const r2 = renda * m.pcts[1] / 100;
+  const r3 = renda * m.pcts[2] / 100;
+  lastAllocations = [r1, r2, r3];
 
-  const res = document.getElementById('resultado');
-  res.classList.add('show');
+  document.getElementById('resultado').classList.add('show');
+  animCount(document.getElementById('v50'), r1);
+  animCount(document.getElementById('v30'), r2);
+  animCount(document.getElementById('v20'), r3);
+  updateRemaining();
 
-  animCount(document.getElementById('v50'), r50);
-  animCount(document.getElementById('v30'), r30);
-  animCount(document.getElementById('v20'), r20);
-
-  // Update legend amounts
   const fmt = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  document.getElementById('leg-50').textContent = fmt(r50) + ' / mês';
-  document.getElementById('leg-30').textContent = fmt(r30) + ' / mês';
-  document.getElementById('leg-20').textContent = fmt(r20) + ' / mês';
+  document.getElementById('leg-50').textContent = fmt(r1) + ' / mês';
+  document.getElementById('leg-30').textContent = fmt(r2) + ' / mês';
+  document.getElementById('leg-20').textContent = fmt(r3) + ' / mês';
 
   showToast('✓', 'Orçamento calculado! Role para ver a distribuição.');
 }
@@ -1630,55 +2133,66 @@ function animCount(el, target) {
     const p = Math.min((ts - start) / dur, 1);
     const ease = 1 - Math.pow(1 - p, 3);
     el.textContent = fmt(target * ease);
-    if (p < 1) requestAnimationFrame(step);
-    else el.textContent = fmt(target);
+    if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target);
   }
   requestAnimationFrame(step);
 }
 
 function ripple(e) {
-  const btn = e.currentTarget || document.getElementById('btnCalc');
+  const btn = document.getElementById('btnCalc');
   const span = document.createElement('span');
   span.className = 'ripple';
   const d = Math.max(btn.clientWidth, btn.clientHeight);
   const rect = btn.getBoundingClientRect();
-  const x = (e.clientX || rect.left + rect.width / 2) - rect.left - d / 2;
-  const y = (e.clientY || rect.top + rect.height / 2) - rect.top - d / 2;
-  span.style.cssText = `width:${d}px;height:${d}px;left:${x}px;top:${y}px`;
+  const cx = (e && e.clientX) ? e.clientX : rect.left + rect.width / 2;
+  const cy = (e && e.clientY) ? e.clientY : rect.top + rect.height / 2;
+  span.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (cx - rect.left - d / 2) + 'px;top:' + (cy - rect.top - d / 2) + 'px';
   btn.appendChild(span);
   setTimeout(() => span.remove(), 700);
 }
 
-// Enter key
-document.getElementById('renda').addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    calcular({ currentTarget: document.getElementById('btnCalc'), clientX: 0, clientY: 0 });
-  }
-});
+/* CALCULADORA SECUNDÁRIA */
+document.getElementById('field1Input').addEventListener('input', calcSecondary);
+document.getElementById('field2Input').addEventListener('input', calcSecondary);
 
-// ─── RESERVA CALCULATOR ───
-function calcReserva() {
-  const custo = parseFloat(document.getElementById('custoVida').value);
-  const meses = parseInt(document.getElementById('mesesReserva').value);
-  if (!custo || custo <= 0) return;
+function calcSecondary() {
+  const m = MODES[currentMode];
+  const v1 = parseMasked(document.getElementById('field1Input'), 'currency');
+  const v2 = parseMasked(document.getElementById('field2Input'), m.field2Mask);
+  if (!v1 || v1 <= 0) return;
 
-  const meta = custo * meses;
-  const mensal = meta / 12;
   const fmt = n => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  let val1, sub1, val2, sub2;
 
-  document.getElementById('reservaMeta').textContent = fmt(meta);
-  document.getElementById('reservaMeses').textContent = `${meses} meses de custo de vida`;
-  document.getElementById('reservaMensal').textContent = fmt(mensal);
+  if (m.calcType === 'reserve') {
+    const meses = (v2 && v2 > 0) ? v2 : 6;
+    const meta = v1 * meses;
+    val1 = fmt(meta); sub1 = meses + ' meses de custo de vida';
+    val2 = fmt(meta / 12); sub2 = 'para atingir em 12 meses';
+  } else if (m.calcType === 'debt') {
+    if (!v2 || v2 <= 0) return;
+    const meses = Math.ceil(v1 / v2);
+    val1 = meses + ' meses'; sub1 = '≈ ' + (meses / 12).toFixed(1) + ' anos (estimativa sem juros)';
+    val2 = fmt(v2 * meses); sub2 = 'total pago ao longo do período';
+  } else if (m.calcType === 'fire') {
+    const taxa = ((v2 && v2 > 0) ? v2 : 4) / 100;
+    const patrimonio = (v1 * 12) / taxa;
+    val1 = fmt(patrimonio); sub1 = 'taxa de retirada de ' + ((v2 && v2 > 0) ? v2 : 4) + '% ao ano';
+    val2 = fmt((patrimonio * taxa) / 12); sub2 = 'renda mensal estimada do patrimônio';
+  }
 
+  document.getElementById('resVal1').textContent = val1;
+  document.getElementById('resSub1').textContent = sub1;
+  document.getElementById('resVal2').textContent = val2;
+  document.getElementById('resSub2').textContent = sub2;
   document.getElementById('reservaResult').classList.add('show');
 }
 
-// ─── ACCORDION ───
+/* ACCORDION — altura calculada via scrollHeight (corrige o bug apontado na revisão) */
 function toggleAccordion(header) {
   const item = header.closest('.accordion-item');
   const isOpen = item.classList.contains('open');
 
-  // Close all
   document.querySelectorAll('.accordion-item.open').forEach(i => {
     i.classList.remove('open');
     i.querySelector('.accordion-header').setAttribute('aria-expanded', 'false');
@@ -1689,8 +2203,13 @@ function toggleAccordion(header) {
     header.setAttribute('aria-expanded', 'true');
   }
 }
+document.querySelectorAll('.accordion-header').forEach(h => {
+  h.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAccordion(h); }
+  });
+});
 
-// ─── TOAST ───
+/* TOAST */
 let toastTimer;
 function showToast(icon, text) {
   const toast = document.getElementById('toast');
@@ -1700,6 +2219,21 @@ function showToast(icon, text) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
 }
+
+/* INICIALIZAÇÃO */
+(function init() {
+  let { mode, anchor } = parseLocationHash();
+
+  if (!location.hash || location.hash === '#inicio') {
+    const savedMode = localStorage.getItem('activeMode');
+    if (savedMode && MODES[savedMode]) mode = savedMode;
+  }
+
+  const savedRenda = localStorage.getItem('lastRenda');
+  if (savedRenda) document.getElementById('renda').value = savedRenda;
+
+  setMode(mode, { scrollTo: anchor, fromHash: true });
+})();
 </script>
 </body>
 </html>
