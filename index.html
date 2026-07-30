@@ -1525,6 +1525,17 @@ footer strong { color: var(--gold); }
 </div>
 
 <script>
+/* localStorage seguro — alguns WebViews (WhatsApp, apps de galeria, etc.) bloqueiam
+   localStorage e lançam SecurityError, o que travaria todo o script sem isso */
+function getSavedItem(key) {
+  try { return localStorage.getItem(key); }
+  catch (e) { return null; }
+}
+function setSavedItem(key, value) {
+  try { localStorage.setItem(key, value); }
+  catch (e) { console.warn('Não foi possível salvar (modo privado/WebView).'); }
+}
+
 const MODES = {
   ok: {
     hash: '',
@@ -1755,7 +1766,7 @@ function setMode(mode, opts) {
   opts = opts || {};
   if (!MODES[mode]) mode = 'ok';
   currentMode = mode;
-  localStorage.setItem('activeMode', mode);
+  setSavedItem('activeMode', mode);
   const m = MODES[mode];
 
   document.getElementById('pageTitle').textContent = m.pageTitle;
@@ -1887,10 +1898,10 @@ function setTheme(isDark) {
   root.setAttribute('data-theme', isDark ? 'dark' : 'light');
   toggle.textContent = isDark ? '🌙' : '☀️';
   updateChartColors();
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  setSavedItem('theme', isDark ? 'dark' : 'light');
 }
 toggle.addEventListener('click', () => setTheme(!dark));
-const saved = localStorage.getItem('theme');
+const saved = getSavedItem('theme');
 if (saved) setTheme(saved === 'dark');
 
 /* MOBILE MENU */
@@ -1937,61 +1948,76 @@ function hexToRgba(hex, alpha) {
   return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
 }
 
-/* GRÁFICO DE PIZZA */
-let donutChart = new Chart(document.getElementById('grafico'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Essenciais 50%', 'Estilo de vida 30%', 'Investimentos 20%'],
-    datasets: [{ data: [50, 30, 20], backgroundColor: ['#3ecf74', '#4d9ef7', '#f7924d'], borderColor: '#111318', borderWidth: 4, hoverOffset: 10 }]
-  },
-  options: {
-    cutout: '72%',
-    maintainAspectRatio: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: { backgroundColor: '#181c24', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#6b7280', padding: 12, cornerRadius: 10 }
-    },
-    animation: { animateScale: true, duration: 1000, easing: 'easeOutQuart' },
-    onClick(evt, elements) {
-      if (elements.length > 0) {
-        const m = MODES[currentMode];
-        showToast('💡', m.cards[elements[0].index].desc);
+/* GRÁFICOS — protegidos: se o Chart.js falhar ao carregar (CDN bloqueado/instável
+   no mobile), o resto do site continua funcionando normalmente, só sem os gráficos */
+let donutChart = null;
+let barChart = null;
+let currentBarSuffix = 'm';
+let currentBarTooltip = 'meses de custo de vida';
+
+try {
+  if (typeof Chart !== 'undefined') {
+    donutChart = new Chart(document.getElementById('grafico'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Essenciais 50%', 'Estilo de vida 30%', 'Investimentos 20%'],
+        datasets: [{ data: [50, 30, 20], backgroundColor: ['#3ecf74', '#4d9ef7', '#f7924d'], borderColor: '#111318', borderWidth: 4, hoverOffset: 10 }]
+      },
+      options: {
+        cutout: '72%',
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: { backgroundColor: '#181c24', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#6b7280', padding: 12, cornerRadius: 10 }
+        },
+        animation: { animateScale: true, duration: 1000, easing: 'easeOutQuart' },
+        onClick(evt, elements) {
+          if (elements.length > 0) {
+            const m = MODES[currentMode];
+            showToast('💡', m.cards[elements[0].index].desc);
+          }
+        }
       }
-    }
+    });
+
+    barChart = new Chart(document.getElementById('reservaChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Mínimo (3 meses)', 'Ideal (6 meses)', 'Conservador (12 meses)'],
+        datasets: [{ label: 'Cenário', data: [3, 6, 12], backgroundColor: [], borderColor: [], borderWidth: 1, borderRadius: 8, borderSkipped: false }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#181c24', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#6b7280', padding: 12, cornerRadius: 10,
+            callbacks: { label: ctx => ' ' + ctx.parsed.y + ' ' + currentBarTooltip }
+          }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 } } },
+          y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 }, callback: v => v + currentBarSuffix } }
+        },
+        animation: { duration: 1000, easing: 'easeOutQuart' }
+      }
+    });
+  } else {
+    console.warn('Chart.js não carregou — gráficos desativados nesta sessão.');
   }
-});
+} catch (erro) {
+  console.warn('Gráficos não carregaram:', erro);
+}
+
 function updateDonutChart(m) {
+  if (!donutChart) return;
   donutChart.data.labels = m.chartLabelsSuffix.map((l, i) => l + ' ' + m.pcts[i] + '%');
   donutChart.data.datasets[0].data = m.pcts;
   donutChart.update();
 }
 
-/* GRÁFICO DE BARRAS */
-let currentBarSuffix = 'm';
-let currentBarTooltip = 'meses de custo de vida';
-let barChart = new Chart(document.getElementById('reservaChart'), {
-  type: 'bar',
-  data: {
-    labels: ['Mínimo (3 meses)', 'Ideal (6 meses)', 'Conservador (12 meses)'],
-    datasets: [{ label: 'Cenário', data: [3, 6, 12], backgroundColor: [], borderColor: [], borderWidth: 1, borderRadius: 8, borderSkipped: false }]
-  },
-  options: {
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        backgroundColor: '#181c24', borderColor: 'rgba(255,255,255,0.08)', borderWidth: 1, titleColor: '#e8eaf0', bodyColor: '#6b7280', padding: 12, cornerRadius: 10,
-        callbacks: { label: ctx => ' ' + ctx.parsed.y + ' ' + currentBarTooltip }
-      }
-    },
-    scales: {
-      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 } } },
-      y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#6b7280', font: { family: 'DM Sans', size: 12 }, callback: v => v + currentBarSuffix } }
-    },
-    animation: { duration: 1000, easing: 'easeOutQuart' }
-  }
-});
 function updateBarChart(m) {
+  if (!barChart) return;
   currentBarSuffix = m.barSuffix;
   currentBarTooltip = m.barTooltip;
   barChart.data.labels = m.barLabels;
@@ -2009,22 +2035,28 @@ function updateChartColors() {
   const orange = getCSSVar('--orange') || '#f7924d';
   const gold = getCSSVar('--gold') || '#c9a84c';
 
-  donutChart.data.datasets[0].backgroundColor = [green, blue, orange];
-  donutChart.data.datasets[0].borderColor = surface;
-  donutChart.update();
+  if (donutChart) {
+    donutChart.data.datasets[0].backgroundColor = [green, blue, orange];
+    donutChart.data.datasets[0].borderColor = surface;
+    donutChart.update();
+  }
 
-  barChart.data.datasets[0].backgroundColor = [hexToRgba(gold, 0.3), hexToRgba(gold, 0.65), hexToRgba(gold, 0.95)];
-  barChart.data.datasets[0].borderColor = [gold, gold, gold];
-  barChart.update();
+  if (barChart) {
+    barChart.data.datasets[0].backgroundColor = [hexToRgba(gold, 0.3), hexToRgba(gold, 0.65), hexToRgba(gold, 0.95)];
+    barChart.data.datasets[0].borderColor = [gold, gold, gold];
+    barChart.update();
+  }
 }
 
 /* HOVER DA LEGENDA */
 document.querySelectorAll('.legend-item').forEach((item, i) => {
   item.addEventListener('mouseenter', () => {
+    if (!donutChart) return;
     donutChart.tooltip.setActiveElements([{ datasetIndex: 0, index: i }], { x: 0, y: 0 });
     donutChart.update();
   });
   item.addEventListener('mouseleave', () => {
+    if (!donutChart) return;
     donutChart.tooltip.setActiveElements([], {});
     donutChart.update();
   });
@@ -2043,7 +2075,7 @@ const REMAINING_IDS = ['remainingA', 'remainingB', 'remainingC'];
 
 function loadGastos(mode) {
   let saved = [];
-  try { saved = JSON.parse(localStorage.getItem('gastos_' + mode) || '[]'); } catch (e) { saved = []; }
+  try { saved = JSON.parse(getSavedItem('gastos_' + mode) || '[]'); } catch (e) { saved = []; }
   SPENT_IDS.forEach((id, i) => {
     document.getElementById(id).value = saved[i] || '';
   });
@@ -2052,7 +2084,7 @@ function loadGastos(mode) {
 
 function saveGastos() {
   const values = SPENT_IDS.map(id => document.getElementById(id).value);
-  localStorage.setItem('gastos_' + currentMode, JSON.stringify(values));
+  setSavedItem('gastos_' + currentMode, JSON.stringify(values));
 }
 
 function updateRemaining() {
@@ -2100,7 +2132,7 @@ function calcular(e) {
   input.classList.remove('error');
   errEl.textContent = '';
 
-  localStorage.setItem('lastRenda', input.value);
+  setSavedItem('lastRenda', input.value);
 
   ripple(e);
 
@@ -2225,11 +2257,11 @@ function showToast(icon, text) {
   let { mode, anchor } = parseLocationHash();
 
   if (!location.hash || location.hash === '#inicio') {
-    const savedMode = localStorage.getItem('activeMode');
+    const savedMode = getSavedItem('activeMode');
     if (savedMode && MODES[savedMode]) mode = savedMode;
   }
 
-  const savedRenda = localStorage.getItem('lastRenda');
+  const savedRenda = getSavedItem('lastRenda');
   if (savedRenda) document.getElementById('renda').value = savedRenda;
 
   setMode(mode, { scrollTo: anchor, fromHash: true });
