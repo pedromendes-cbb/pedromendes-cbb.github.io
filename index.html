@@ -1700,7 +1700,8 @@ const MODES = {
 
 let currentMode = 'ok';
 
-/* ROTEAMENTO POR HASH */
+/* ROTEAMENTO POR HASH — formato: #<perfil>/<ancora>  ex: #504010/simulador
+   (aceita também o formato antigo com # duplo, por compatibilidade) */
 function modeKeyFromHash(part) {
   if (part === MODES.d.hash) return 'd';
   if (part === MODES.l.hash) return 'l';
@@ -1709,7 +1710,7 @@ function modeKeyFromHash(part) {
 function parseLocationHash() {
   const raw = location.hash.replace(/^#/, '');
   if (!raw) return { mode: 'ok', anchor: null };
-  const parts = raw.split('#').filter(Boolean);
+  const parts = raw.split(/[\/#]/).filter(Boolean);
   const maybeMode = modeKeyFromHash(parts[0]);
   if (maybeMode) return { mode: maybeMode, anchor: parts[1] || null };
   return { mode: 'ok', anchor: parts[0] };
@@ -1717,7 +1718,7 @@ function parseLocationHash() {
 function buildHash(mode, anchor) {
   const prefix = MODES[mode].hash;
   if (!anchor) return prefix ? '#' + prefix : '#inicio';
-  return prefix ? '#' + prefix + '#' + anchor : '#' + anchor;
+  return prefix ? '#' + prefix + '/' + anchor : '#' + anchor;
 }
 function updateNavHrefs() {
   document.querySelectorAll('[data-target]').forEach(a => {
@@ -1879,14 +1880,14 @@ document.querySelectorAll('[data-target]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
     const anchor = a.getAttribute('data-target');
-    setMode(currentMode, { anchor });
+    setMode(currentMode, { anchor, scrollTo: anchor });
     mobileMenu.classList.remove('open');
     hamburger.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
   });
 });
 document.querySelectorAll('.version-pill').forEach(btn => {
-  btn.addEventListener('click', () => setMode(btn.getAttribute('data-mode'), {}));
+  btn.addEventListener('click', () => setMode(btn.getAttribute('data-mode'), { anchor: 'simulador', scrollTo: 'simulador' }));
 });
 
 /* THEME TOGGLE */
