@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O Microscópio — Jornal científico escolar</title>
+<meta name="description" content="O Microscópio: jornal científico escolar. Entenda o que são vírus, como o SARS-CoV-2 se espalha, os sintomas da COVID-19 e como reduzir o risco de infecção.">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111;--mut:#666;--line:#d8d8d8;--acc:#8b1e3f;--bg:#f5f5f5;--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:'Source Sans 3',system-ui,Arial,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:12px}
+body{margin:0;font:400 16px/1.45 var(--sans);color:var(--ink);background:#fff;overflow-x:hidden}
+a{color:inherit;text-decoration:none}a:hover{color:var(--acc)}:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:700;margin:0;line-height:1.18}
+p{margin:0}ul,ol{margin:0}
+.wrap{max-width:1100px;margin:0 auto;padding:0 14px}
+.skip{position:absolute;left:-999px}.skip:focus{left:6px;top:6px;background:#fff;padding:6px;z-index:99}
+/* cabeçalho */
+.dt{border-bottom:1px solid var(--line);font-size:12.5px;color:var(--mut)}.dt .wrap{display:flex;justify-content:space-between;padding-top:5px;padding-bottom:5px}
+.mast{display:grid;grid-template-columns:90px 1fr 90px;align-items:center;padding-top:12px;padding-bottom:10px}
+.logo{grid-column:2;text-align:center;font:700 clamp(30px,6vw,52px)/1 var(--serif);letter-spacing:-.5px;color:var(--ink)}.logo:hover{color:var(--ink)}
+.logo small{display:block;font:400 12px var(--sans);color:var(--mut);letter-spacing:0;margin-top:3px}
+.tb{background:none;border:0;font:600 14px var(--sans);color:var(--ink);cursor:pointer;padding:6px 0}.tb:hover{color:var(--acc)}
+.mast .r{text-align:right}
+nav.cat{border-top:3px solid var(--ink);border-bottom:1px solid var(--ink)}nav.cat .wrap{display:none;gap:22px;justify-content:center;padding-top:8px;padding-bottom:8px;font:600 14.5px var(--sans)}
+nav.cat a:hover{text-decoration:underline;text-underline-offset:5px}
+#search,#mnav{display:none;border-bottom:1px solid var(--ink);background:var(--bg)}#search.on,#mnav.on{display:block}
+#search .wrap{padding-top:10px;padding-bottom:10px}#q{width:100%;padding:9px;font:16px var(--sans);border:1px solid #999;border-radius:2px}
+#res{list-style:none;padding:0;margin-top:6px;background:#fff}#res a,#res li{display:block;padding:8px 10px;border-bottom:1px solid var(--line)}
+#mnav ul{list-style:none;padding:0 14px;display:grid;grid-template-columns:1fr 1fr;column-gap:20px;background:#fff}#mnav a{display:block;padding:11px 0;border-bottom:1px solid var(--line);font-weight:600}
+@media(min-width:900px){nav.cat .wrap{display:flex}#bm{visibility:hidden}}
+/* primeira página */
+.front{display:grid;gap:0;padding-top:16px}
+.front>*{padding:0 0 14px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+@media(min-width:900px){.front{grid-template-columns:minmax(0,6fr) minmax(0,3.3fr) minmax(0,2.5fr)}.front>*{border-bottom:0;margin:0 0 6px;padding:0 16px;border-left:1px solid var(--line)}.front>*:first-child{padding-left:0;border-left:0}.front>*:last-child{padding-right:0}}
+.img{aspect-ratio:16/9;background:#1f2a36;overflow:hidden}.img svg{display:block;width:100%;height:100%}
+.cap{font-size:12.5px;color:var(--mut);margin-top:4px}
+.k{display:block;font:700 13px var(--sans);color:var(--acc);margin:8px 0 3px}
+.lead h1{font-size:clamp(28px,4.4vw,40px);letter-spacing:-.4px}.lead p.s{font:400 18px/1.35 var(--serif);color:#333;margin-top:8px}
+.lead a:hover h1{color:var(--acc)}
+.it{display:grid;grid-template-columns:1fr 104px;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.it:first-child{padding-top:0}.it:last-child{border-bottom:0}
+.it h3{font-size:18px;line-height:1.22}.it p{font-size:14px;color:var(--mut);margin-top:4px;line-height:1.35}.it .img{aspect-ratio:4/3;order:2}
+.it:hover h3{color:var(--acc)}
+.bh{font:700 15px var(--sans);border-top:3px solid var(--ink);padding-top:6px;margin-bottom:6px}
+.rk{list-style:none;padding:0}.rk li{display:grid;grid-template-columns:34px 1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}.rk li:last-child{border-bottom:0}
+.rk b{font:700 26px/1 var(--serif);color:var(--acc)}.rk a{font:600 16px/1.25 var(--serif)}
+/* seções */
+.sec{margin-top:26px}.sec>.wrap>h2{font:700 22px var(--serif);color:var(--acc);border-top:1px solid var(--ink);padding-top:6px;margin-bottom:12px}
+.cols{display:grid;gap:0}.cols>*{padding:12px 0;border-bottom:1px solid var(--line)}.cols>*:last-child{border-bottom:0}
+@media(min-width:760px){.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.cols>*{padding:0 16px;border-bottom:0;border-left:1px solid var(--line)}.cols>*:first-child{padding-left:0;border-left:0}.cols>*:last-child{padding-right:0}}
+.cols h3{font-size:19px;margin-bottom:5px}.cols p,.cols li{font-size:15.5px;line-height:1.5;color:#222}
+.cols ul{padding-left:18px}
+.steps{list-style:none;padding:0}.steps li{display:grid;grid-template-columns:26px 1fr;padding:6px 0;border-bottom:1px dotted #bbb}.steps b{font-family:var(--serif);color:var(--acc)}
+.alerta{border-left:4px solid var(--acc)!important;padding-left:14px!important}
+.num{font:700 28px/1.1 var(--serif);margin-bottom:2px}.src{font-size:13px;color:var(--mut);margin-top:4px}
+.tw{overflow-x:auto;margin-top:16px}table{width:100%;min-width:460px;border-collapse:collapse;font-size:15px}caption{text-align:left;font:700 16px var(--sans);padding-bottom:6px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}thead th{border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);font-size:13.5px}tbody th{font-weight:600;width:38%}
+.box{background:var(--bg);border-top:3px solid var(--acc);padding:14px 16px}
+#fontes ol{padding-left:22px;font-size:14.5px}#fontes li{margin-bottom:5px}
+/* matéria */
+.pg{display:grid;gap:24px;padding-top:18px}@media(min-width:900px){.pg{grid-template-columns:minmax(0,1fr) 300px;gap:0}.pg>aside{padding-left:20px;margin-left:24px;border-left:1px solid var(--line)}}
+.ar{max-width:720px}.crumb{font:700 13px var(--sans);color:var(--acc)}
+.ar h1{font-size:clamp(28px,4.6vw,42px);margin:6px 0 10px;letter-spacing:-.4px}.ar .sub{font:400 20px/1.35 var(--serif);color:#333}
+.by{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:14px 0;padding:8px 0;font-size:13.5px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center}.by strong{color:var(--ink)}
+.by .tb{margin-left:auto;font-size:13.5px;color:var(--acc)}
+.body{font:400 18.5px/1.7 var(--serif);margin-top:18px}.body p{margin-bottom:16px}.body h2{font:700 22px var(--sans);margin:26px 0 8px}.body ul{padding-left:22px;margin-bottom:16px}.body li{margin-bottom:7px}
+.co{background:var(--bg);border-left:4px solid var(--acc);padding:12px 16px;margin:24px 0}.co b{font:700 15px var(--sans)}.co p{font:400 17px/1.5 var(--serif);margin-top:3px}
+.refs{border-top:1px solid var(--ink);padding-top:8px;font-size:14px;color:var(--mut)}.refs h2{font:700 15px var(--sans);color:var(--ink)}.refs a{color:var(--acc);text-decoration:underline}
+/* rodapé */
+footer{margin-top:36px;background:var(--bg);border-top:4px solid var(--ink)}footer .wrap{display:grid;gap:18px;padding-top:22px;padding-bottom:22px}@media(min-width:760px){footer .wrap{grid-template-columns:2fr 1fr 1.4fr}}
+footer h4{font:700 15px var(--sans);margin-bottom:6px}footer ul{list-style:none;padding:0;font-size:14px}footer li{margin-bottom:3px}footer p{font-size:14px;color:#444}
+footer .logo{text-align:left;font-size:26px;margin-bottom:6px}.cp{border-top:1px solid var(--line);font-size:12.5px;color:var(--mut);padding:10px 14px;text-align:center}
+#up{position:fixed;right:14px;bottom:14px;display:none;background:var(--ink);color:#fff;border:0;border-radius:2px;padding:9px 12px;font:600 13px var(--sans);cursor:pointer}#up.on{display:block}#up:hover{background:var(--acc)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+.ig{margin:0 0 18px;border-top:3px solid var(--ink);border-bottom:1px solid var(--line);padding:10px 0 12px}
+.igt{font:700 17px var(--serif);margin-bottom:10px}
+.igr{display:grid;gap:3px;margin-bottom:12px}.igr>span{font-size:14px;font-weight:600}
+.igb{display:flex;height:26px;background:var(--bg)}.igb i{display:block;height:100%}
+.b1{background:#1f2a36}.b2{background:var(--acc)}.b3{background:repeating-linear-gradient(45deg,#fff 0 3px,#bbb 3px 5px);border:1px dashed #666}
+.igr b{font:700 20px var(--serif)}.igl{font-size:12.5px;color:var(--mut);display:flex;flex-wrap:wrap;gap:4px 16px}
+.igl i{display:inline-block;width:12px;height:12px;margin-right:5px;vertical-align:-1px}
+.vid{display:grid;gap:14px}@media(min-width:760px){.vid{grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:0}.vid>div:last-child{padding-left:16px;margin-left:16px;border-left:1px solid var(--line)}}
+.vf{position:relative;padding:75% 0 0;background:#111}.vf iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.toc{border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:8px 0 4px;margin-top:14px;font-size:14.5px}.toc b{font:700 14px var(--sans)}.toc ol{margin:4px 0 0;padding-left:20px}@media(min-width:640px){.toc ol{columns:2;column-gap:28px}}.toc li{margin-bottom:3px;break-inside:avoid}.toc a{color:var(--acc)}.toc a:hover{text-decoration:underline}
+a,button{transition:color .15s}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Ir para o conteúdo</a>
+<header>
+ <div class="dt"><div class="wrap"><span id="dt"></span><span>Jornal científico escolar</span></div></div>
+ <div class="wrap mast">
+  <button class="tb" id="bm" aria-expanded="false" aria-controls="mnav" aria-label="Abrir menu">☰ Menu</button>
+  <a class="logo" href="#/" aria-label="O Microscópio — página inicial">O Microscópio<small>Ciência e saúde para a escola</small></a>
+  <div class="r"><button class="tb" id="bs" aria-expanded="false" aria-controls="search">Buscar</button></div>
+ </div>
+ <nav class="cat" aria-label="Categorias"><div class="wrap" id="cats"></div></nav>
+ <div id="search"><div class="wrap"><label for="q" class="skip">Pesquisar</label><input id="q" placeholder="Pesquisar: vírus, sintomas, vacina…" autocomplete="off"><ul id="res"></ul></div></div>
+ <nav id="mnav" aria-label="Menu"><ul id="mlist"></ul></nav>
+</header>
+<main id="conteudo"></main>
+<footer>
+ <div class="wrap">
+  <div><a class="logo" href="#/">O Microscópio</a><p>Jornal científico escolar que transforma pesquisa em notícia: do vírus à prevenção, com linguagem clara e fontes à vista.</p><p style="margin-top:8px">Autoria: Equipe O Microscópio.</p></div>
+  <nav aria-label="Categorias do rodapé"><h4>Editorias</h4><ul id="fcats"></ul></nav>
+  <div><h4>Fontes da pesquisa</h4><ul><li>Organização Mundial da Saúde (OMS)</li><li>Centers for Disease Control and Prevention (CDC)</li><li>Fundação Oswaldo Cruz (Fiocruz)</li></ul></div>
+ </div>
+ <p class="cp">© 2026 O Microscópio. Projeto científico escolar, de caráter educativo; não substitui orientação médica.</p>
+</footer>
+<button id="up" aria-label="Voltar ao topo">Topo ↑</button>
+<script>
+
+const AUTOR='Equipe O Microscópio';
+const NAV=[['Ciência','entenda'],['Entrevista','entrevista'],['Saúde','sintomas'],['Prevenção','prevencao'],['Dados','dados'],['Curiosidades','curiosidades'],['Fontes','fontes']];
+const ART=[
+{id:'covid',cat:'Saúde',tone:'#8b1e3f',title:'COVID-19: como um pequeno vírus provocou uma grande transformação no mundo',sub:'Entenda o que são os vírus, como o SARS-CoV-2 se espalha, quais são seus principais sintomas e como reduzir o risco de infecção.',
+ blocks:[{h:'Uma doença que marcou a história recente',p:['No final de 2019, uma nova doença respiratória começou a ser identificada na cidade de Wuhan, na China. A doença recebeu o nome de COVID-19 e é causada pelo vírus SARS-CoV-2, pertencente à família dos coronavírus.','A rápida transmissão do vírus fez com que a doença se espalhasse por diversos países, provocando uma pandemia. Durante esse período, hospitais ficaram sobrecarregados, escolas foram fechadas temporariamente e medidas como isolamento, uso de máscaras e vacinação passaram a fazer parte da rotina de milhões de pessoas.']},
+ {h:'E hoje?',p:['Atualmente, o SARS-CoV-2 continua circulando e causando casos de COVID-19. Na maioria das pessoas, a doença apresenta sintomas leves ou moderados, mas alguns indivíduos podem desenvolver formas graves, principalmente pessoas idosas e aquelas com determinadas condições de saúde.','A vacinação continua sendo uma das principais ferramentas para reduzir o risco de hospitalização e morte por COVID-19. Além disso, medidas como ventilação dos ambientes, higiene das mãos e permanência em casa quando há sintomas respiratórios ajudam a diminuir a transmissão.']},
+ {h:'O que é um vírus?',p:['Um vírus é um agente infeccioso microscópico formado basicamente por material genético, que pode ser DNA ou RNA, envolvido por estruturas de proteção.','Diferentemente das células, os vírus não conseguem se reproduzir sozinhos. Para produzir novas cópias, precisam invadir uma célula de um organismo hospedeiro e utilizar parte da estrutura dessa célula. Assim, novas partículas virais podem infectar outras células.','O SARS-CoV-2 é um vírus de RNA e possui uma estrutura característica semelhante a uma coroa, devido às proteínas presentes em sua superfície. É daí que vem o nome "coronavírus".']},
+{h:'Quais doenças os vírus causam?',p:['Os vírus podem causar diversas doenças em seres humanos. Alguns exemplos:'],l:['Gripe — causada principalmente pelos vírus Influenza.','COVID-19 — causada pelo SARS-CoV-2.','Dengue — causada pelo vírus da dengue.','Sarampo — causado pelo vírus do sarampo.','Febre amarela — causada pelo vírus da febre amarela.','Hepatite viral — causada por diferentes vírus.','AIDS — causada pelo HIV.']},
+{p:['A COVID-19 afeta principalmente o sistema respiratório, mas também pode afetar outras partes do organismo. A maioria das pessoas apresenta doença leve ou moderada, enquanto uma parcela pode desenvolver complicações graves.']},
+{h:'Como ocorre a transmissão',p:['A principal forma de transmissão acontece pelo ar, por meio de partículas respiratórias liberadas por uma pessoa infectada. Quando alguém infectado fala, tosse, espirra, canta ou respira, pode liberar partículas contendo o vírus.','Outra pessoa pode se infectar ao inalar essas partículas ou quando elas entram em contato com regiões como nariz, boca ou olhos. O risco aumenta em locais fechados, lotados e com pouca ventilação.','Uma pessoa infectada também pode transmitir o vírus mesmo antes de apresentar sintomas ou quando apresenta poucos sintomas.']},
+{h:'Quais são os principais sintomas',p:['Os sintomas podem variar bastante de uma pessoa para outra. Os mais comuns são:'],l:['Febre','Calafrios','Dor de garganta','Tosse','Cansaço','Dor de cabeça','Coriza ou nariz entupido','Dores musculares'],q:['Também podem ocorrer alterações ou perda do olfato e do paladar, náuseas, vômitos e diarreia.']},
+{h:'Sinais de alerta',p:['Alguns sintomas podem indicar uma condição mais grave. Nesses casos, é importante procurar atendimento médico imediatamente:'],l:['Dificuldade para respirar','Falta de ar','Dor ou pressão no peito','Confusão','Dificuldade para permanecer acordado']},
+{h:'Como prevenir a COVID-19',p:['Não existe uma única medida capaz de eliminar completamente o risco. A combinação de diferentes estratégias é mais eficaz.'],l:['Vacinação: reduz principalmente o risco de doença grave, hospitalização e morte.','Ventilação: manter janelas abertas e permitir a circulação de ar reduz o acúmulo de partículas respiratórias em ambientes fechados.','Máscara: pode ajudar a reduzir a transmissão, especialmente em ambientes de maior risco ou quando uma pessoa apresenta sintomas.','Higiene das mãos: lavar as mãos com água e sabão ou utilizar álcool em gel ajuda a manter uma boa higiene.','Etiqueta respiratória: ao tossir ou espirrar, cobrir a boca e o nariz com o cotovelo ou um lenço.','Ficar em casa quando estiver doente: evitar contato próximo com outras pessoas enquanto estiver com sintomas respiratórios ajuda a diminuir a transmissão.']},
+{h:'Curiosidades científicas',p:['Quando observado por microscopia eletrônica, o SARS-CoV-2 apresenta proteínas na superfície que lembram uma coroa. A palavra "corona" significa coroa em latim, e por isso os vírus dessa família receberam o nome de coronavírus.','O SARS-CoV-2 possui RNA como material genético. Durante sua multiplicação, podem ocorrer alterações nesse material. Algumas dessas alterações podem contribuir para o surgimento de novas variantes do vírus.']},
+{h:'Os números e seus limites',p:['Desde o início da pandemia, foram registrados mundialmente centenas de milhões de casos e milhões de mortes associadas à COVID-19. A Organização Mundial da Saúde ressalta que os números registrados provavelmente não representam todo o impacto real da doença.']}],
+ co:['Vírus e doença não são a mesma coisa','SARS-CoV-2 é o nome do vírus. COVID-19 é o nome da doença causada por ele.']},
+{id:'virus',cat:'Ciência',tone:'#1f2a36',title:'O que é um vírus? Agente microscópico depende de células para se multiplicar',sub:'Formado basicamente por material genético envolvido por estruturas de proteção, o vírus não se reproduz sozinho.',
+ blocks:[{h:'Um invasor sem maquinaria própria',p:['Um vírus é um agente infeccioso microscópico formado basicamente por material genético, que pode ser DNA ou RNA, envolvido por estruturas de proteção.','Diferentemente das células, os vírus não conseguem se reproduzir sozinhos. Para produzir novas cópias, precisam invadir uma célula de um organismo hospedeiro e utilizar parte da estrutura dessa célula.']},
+ {h:'Por que "coronavírus"?',p:['O SARS-CoV-2 é um vírus de RNA e possui uma estrutura característica semelhante a uma coroa, devido às proteínas presentes em sua superfície. Na microscopia eletrônica, essas proteínas lembram uma coroa, e "corona" significa coroa em latim.']},
+ {h:'Outras doenças causadas por vírus',l:['Gripe — causada principalmente pelos vírus Influenza.','COVID-19 — causada pelo SARS-CoV-2.','Dengue — causada pelo vírus da dengue.','Sarampo — causado pelo vírus do sarampo.','Febre amarela — causada pelo vírus da febre amarela.','Hepatite viral — causada por diferentes vírus.','AIDS — causada pelo HIV.']}],
+ co:['Resumindo','Vírus → entra na célula → utiliza a célula → produz novas cópias → novas partículas virais podem infectar outras células.']},
+{id:'transmissao',cat:'Pesquisa',tone:'#1f2a36',title:'Como o SARS-CoV-2 se espalha: o ar é o principal caminho',sub:'Partículas respiratórias liberadas por uma pessoa infectada são a principal forma de transmissão; ambientes fechados aumentam o risco.',
+ blocks:[{h:'Partículas no ar',p:['A principal forma de transmissão acontece pelo ar, por meio de partículas respiratórias liberadas por uma pessoa infectada. Quando alguém infectado fala, tosse, espirra, canta ou respira, pode liberar partículas contendo o vírus.','Outra pessoa pode se infectar ao inalar essas partículas ou quando elas entram em contato com regiões como nariz, boca ou olhos. O risco aumenta em locais fechados, lotados e com pouca ventilação.']},
+ {h:'Transmissão sem sintomas',p:['Uma pessoa infectada também pode transmitir o vírus mesmo antes de apresentar sintomas ou quando apresenta poucos sintomas.']}],
+ co:['Fonte consultada','OMS, "Coronavirus disease (COVID-19): How is it transmitted?"']},
+{id:'prevencao',cat:'Prevenção',tone:'#1f2a36',title:'Prevenção: nenhuma medida isolada elimina o risco, mas a combinação funciona melhor',sub:'Vacinação, ventilação, máscara, higiene das mãos e etiqueta respiratória fazem parte da estratégia.',
+ blocks:[{p:['Não existe uma única medida capaz de eliminar completamente o risco. A combinação de diferentes estratégias é mais eficaz.']},
+ {h:'Principais formas de prevenção',l:['Vacinação: reduz principalmente o risco de doença grave, hospitalização e morte.','Ventilação: manter janelas abertas e permitir a circulação de ar reduz o acúmulo de partículas respiratórias em ambientes fechados.','Máscara: pode ajudar a reduzir a transmissão, especialmente em ambientes de maior risco ou quando uma pessoa apresenta sintomas.','Higiene das mãos: lavar as mãos com água e sabão ou utilizar álcool em gel ajuda a manter uma boa higiene.','Etiqueta respiratória: ao tossir ou espirrar, cobrir a boca e o nariz com o cotovelo ou um lenço.','Ficar em casa quando estiver doente: evitar contato próximo com outras pessoas enquanto estiver com sintomas respiratórios ajuda a diminuir a transmissão.']}],
+ co:['Sinais de alerta','Dificuldade para respirar, falta de ar, dor ou pressão no peito, confusão ou dificuldade para permanecer acordado: procure atendimento médico imediatamente.']}];
+const COMUNS=['Febre','Calafrios','Dor de garganta','Tosse','Cansaço','Dor de cabeça','Coriza ou nariz entupido','Dores musculares'];
+const ALERTA=['Dificuldade para respirar','Falta de ar','Dor ou pressão no peito','Confusão','Dificuldade para permanecer acordado'];
+const CICLO=[['Entrada','O vírus entra no organismo.'],['Infecção','O SARS-CoV-2 chega a células que pode infectar.'],['Reprodução','Utiliza a estrutura da célula para produzir componentes virais.'],['Montagem','Novas partículas virais são formadas.'],['Liberação','Novos vírus podem infectar outras células.']];
+const TRANS=['Pessoa infectada','Fala, tosse, espirra, respira','Partículas respiratórias contendo SARS-CoV-2','Outra pessoa inala as partículas','Infecção'];
+const RESUMO=[['Agente causador','SARS-CoV-2'],['Tipo','Vírus'],['Material genético','RNA'],['Família','Coronavírus'],['Principal sistema afetado','Respiratório'],['Principal transmissão','Partículas respiratórias pelo ar'],['Sintomas comuns','Febre, calafrios e dor de garganta'],['Prevenção','Vacinação, ventilação, higiene e outras medidas'],['Pode causar doença grave?','Sim']];
+const FONTES=['Organização Mundial da Saúde (OMS). Coronavirus disease (COVID-19). 2025.','Organização Mundial da Saúde (OMS). Coronavirus disease (COVID-19): How is it transmitted?','Centers for Disease Control and Prevention (CDC). How to Protect Yourself and Others — COVID-19. Atualizado em 2025.','Centers for Disease Control and Prevention (CDC). About COVID-19.','Fundação Oswaldo Cruz (Fiocruz). COVID-19 — Vacinar para não Voltar.'];
+
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DATA='06/10/2026';
+function art(tone,label){const sp=Array.from({length:16},(_,i)=>`<g transform="rotate(${i*22.5})"><line y1="-62" y2="-92" stroke="#fff" stroke-width="4"/><circle cy="-98" r="9" fill="#fff"/></g>`).join('');
+return `<svg viewBox="0 0 400 225" role="img" aria-label="${esc(label)}" preserveAspectRatio="xMidYMid slice"><rect width="400" height="225" fill="${tone}"/><g transform="translate(200 112) scale(.82)">${sp}<circle r="64" fill="#fff" opacity=".93"/><path d="M-30-10q15-25 30 0t30 0M-30 14q15-25 30 0t30 0" stroke="${tone}" stroke-width="5" fill="none" stroke-linecap="round"/></g></svg>`}
+const item=a=>`<a class="it" href="#/materia/${a.id}"><div><span class="k">${a.cat}</span><h3>${esc(a.title)}</h3><p>${esc(a.sub)}</p></div><div class="img">${art(a.tone,'Ilustração: '+a.cat)}</div></a>`;
+const sec=(id,t,inner)=>`<section class="sec" id="${id}" aria-labelledby="${id}-t"><div class="wrap"><h2 id="${id}-t">${t}</h2>${inner}</div></section>`;
+const INFO=`<figure class="ig"><figcaption class="igt">Infográfico: casos confirmados e mortes registrados no mundo</figcaption>
+<div class="igr"><span>Casos confirmados registrados</span><div class="igb" aria-hidden="true"><i class="b1" style="width:70%"></i><i class="b3" style="width:16%"></i></div><b>Centenas de milhões</b></div>
+<div class="igr"><span>Mortes associadas à COVID-19</span><div class="igb" aria-hidden="true"><i class="b2" style="width:22%"></i></div><b>Milhões</b></div>
+<p class="igl"><span><i class="b1"></i>Registrado</span><span><i class="b3"></i>Impacto real provavelmente maior, segundo a OMS</span></p>
+<p class="cap">Valores apresentados como ordens de grandeza, conforme a pesquisa. O comprimento das barras é ilustrativo e não está em escala numérica. Fonte: OMS.</p></figure>`;
+const VIDEO=`<div class="vid"><div><div class="vf"><iframe src="https://player.vimeo.com/video/1233640814?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="Entrevista com pesquisador sobre a COVID-19" loading="lazy"></iframe></div><p class="cap">Entrevista com pesquisador, produzida pela equipe do jornal.</p></div><div><h3>Assista à entrevista</h3><p style="margin-top:6px;font-size:15.5px">A equipe conversou com um pesquisador sobre o tema desta edição. O vídeo complementa as matérias e as explicações científicas do jornal.</p></div></div>`;
+const LIDAS=[['O que é um vírus','#/materia/virus'],['Como o vírus se espalha','#/materia/transmissao'],['Como se prevenir da COVID-19','#/materia/prevencao'],['Sintomas e sinais de alerta','#sintomas'],['COVID-19 não é o nome do vírus','#curiosidades']];
+const rank=()=>`<ol class="rk">${LIDAS.map(([t,u],i)=>`<li><b>0${i+1}</b><a href="${u}">${t}</a></li>`).join('')}</ol>`;
+
+function home(){const [h,...o]=ART;
+return `<div class="wrap"><div class="front">
+<article class="lead"><a href="#/materia/${h.id}"><div class="img">${art(h.tone,'Ilustração do SARS-CoV-2 com proteínas em formato de coroa')}</div><p class="cap">Ilustração esquemática do SARS-CoV-2, vírus que causa a COVID-19.</p><span class="k">${h.cat}</span><h1>${esc(h.title)}</h1><p class="s">${esc(h.sub)}</p></a></article>
+<div aria-label="Mais notícias">${o.map(item).join('')}</div>
+<aside aria-labelledby="mr"><h2 class="bh" id="mr">Leia nesta edição</h2>${rank()}</aside></div></div>`+
+sec('destaque','Em destaque',`<div class="cols c3">${[['Pandemia deixou hospitais sobrecarregados e escolas fechadas','Medidas como isolamento, uso de máscaras e vacinação passaram a fazer parte da rotina de milhões de pessoas.'],['Vacinação segue como ferramenta central contra casos graves','Ela reduz o risco de hospitalização e morte por COVID-19, segundo a pesquisa.'],['Quem está infectado pode transmitir o vírus sem sintomas','A transmissão pode ocorrer antes dos sintomas ou quando eles são poucos.']].map(([t,p])=>`<div><h3>${t}</h3><p>${p}</p></div>`).join('')}</div>`)+
+sec('entenda','Entenda',`<div class="cols c2"><div><h3>O ciclo do vírus</h3><ol class="steps">${CICLO.map(([t,p],i)=>`<li><b>${i+1}</b><span><strong>${t}.</strong> ${p}</span></li>`).join('')}</ol></div><div><h3>Caminho da transmissão</h3><ol class="steps">${TRANS.map((t,i)=>`<li><b>${i+1}</b><span>${t}</span></li>`).join('')}</ol><p class="src">O risco aumenta em locais fechados, lotados e com pouca ventilação.</p></div></div>`)+
+sec('entrevista','Entrevista',VIDEO)+
+sec('sintomas','Sintomas e sinais de alerta',`<div class="cols c2"><div><h3>Sintomas comuns</h3><ul>${COMUNS.map(s=>`<li>${s}</li>`).join('')}</ul><p class="src">Também podem ocorrer alterações ou perda do olfato e do paladar, náuseas, vômitos e diarreia.</p></div><div class="alerta"><h3>Sinais de alerta</h3><ul>${ALERTA.map(s=>`<li>${s}</li>`).join('')}</ul><p style="margin-top:8px"><strong>Nesses casos, procure atendimento médico imediatamente.</strong></p></div></div>`)+
+sec('prevencao','Como se prevenir',`<p style="margin-bottom:10px;font-size:15.5px">Não existe uma única medida capaz de eliminar completamente o risco. A combinação de diferentes estratégias é mais eficaz.</p><div class="cols c3">${ART[3].blocks[1].l.map(t=>{const i=t.indexOf(': ');return `<div><h3>${t.slice(0,i)}</h3><p>${t.slice(i+2)}</p></div>`}).join('')}</div>`)+
+sec('dados','COVID-19 em números',`${INFO}<div class="cols c3">${[['Centenas de milhões','de casos registrados no mundo','Valor aproximado, conforme a pesquisa; sem número exato informado.'],['Milhões','de mortes associadas à COVID-19','Valor aproximado, conforme a pesquisa; sem número exato informado.'],['Subnotificação','Impacto real provavelmente maior','A OMS ressalta que os números registrados provavelmente não representam todo o impacto da doença.']].map(([b,l,n])=>`<div><div class="num">${b}</div><strong>${l}</strong><p class="src">${n}</p></div>`).join('')}</div><div class="tw"><table><caption>Resumo científico</caption><thead><tr><th scope="col">Informação</th><th scope="col">COVID-19</th></tr></thead><tbody>${RESUMO.map(([k,v])=>`<tr><th scope="row">${k}</th><td>${v}</td></tr>`).join('')}</tbody></table></div>`)+
+sec('curiosidades','Você sabia?',`<div class="cols c3"><div class="box"><h3>COVID-19 não é o nome do vírus</h3><p style="margin-top:6px">É um erro bastante comum. SARS-CoV-2 é o nome do vírus; COVID-19 é o nome da doença causada por ele. É parecido com HIV (vírus) e AIDS (doença associada à infecção pelo HIV).</p></div><div><h3>Por que "coronavírus"?</h3><p>Na microscopia eletrônica, as proteínas da superfície lembram uma coroa. "Corona" significa coroa em latim.</p></div><div><h3>Novas variantes</h3><p>O SARS-CoV-2 tem RNA como material genético. Durante sua multiplicação, podem ocorrer alterações nele, e algumas podem contribuir para o surgimento de novas variantes.</p></div></div>`)+
+sec('fontes','Fontes',`<ol>${FONTES.map(f=>`<li>${esc(f)}</li>`).join('')}</ol>`)}
+
+function page(id){const a=ART.find(x=>x.id===id);
+if(!a)return `<div class="wrap" style="padding:30px 14px"><h1>Matéria não encontrada</h1><p style="margin-top:10px"><a href="#/" style="color:var(--acc);text-decoration:underline">Voltar à página inicial</a></p></div>`;
+const w=a.blocks.flatMap(b=>[...(b.p||[]),...(b.l||[]),...(b.q||[])]).join(' ').split(/\s+/).length,min=Math.max(1,Math.round(w/200));
+const rel=ART.filter(x=>x.id!==id).map(item).join('');
+return `<div class="wrap pg"><article class="ar"><a class="crumb" href="#/">${a.cat}</a><h1>${esc(a.title)}</h1><p class="sub">${esc(a.sub)}</p>
+<div class="by"><span>Por <strong>${AUTOR}</strong></span><span>${DATA}</span><span>Leitura: ${min} min</span><button class="tb" id="sh">Compartilhar</button><span id="msg" role="status" style="color:var(--acc)"></span></div>
+<figure style="margin:0"><div class="img">${art(a.tone,'Ilustração científica sobre '+a.cat.toLowerCase())}</div><figcaption class="cap">Ilustração esquemática produzida para o jornal, sem escala real.</figcaption></figure>
+${a.blocks.filter(b=>b.h).length>3?`<nav class="toc" aria-label="Nesta matéria"><b>Nesta matéria</b><ol>${a.blocks.map((b,i)=>b.h?`<li><a href="#s${i}">${esc(b.h)}</a></li>`:'').join('')}</ol></nav>`:''}<div class="body">${a.blocks.map((b,i)=>(b.h?`<h2 id="s${i}">${esc(b.h)}</h2>`:'')+(b.p||[]).map(t=>`<p>${esc(t)}</p>`).join('')+(b.l?`<ul>${b.l.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:'')+(b.q||[]).map(t=>`<p>${esc(t)}</p>`).join('')).join('')}</div>
+<aside class="co"><b>${esc(a.co[0])}</b><p>${esc(a.co[1])}</p></aside>
+<section class="refs" aria-labelledby="ref"><h2 id="ref">Fontes</h2><p>OMS, CDC e Fiocruz. Lista completa na <a href="#fontes">página inicial</a>.</p></section></article>
+<aside aria-labelledby="rl"><h2 class="bh" id="rl">Leia também</h2>${rel}</aside></div>`}
+
+const INDEX=[...ART.map(a=>[a.title,'#/materia/'+a.id]),['Sintomas da COVID-19','#sintomas'],['Ciclo do vírus','#entenda'],['COVID-19 em números','#dados'],['Entrevista com pesquisador','#entrevista'],['Você sabia? Vírus x doença','#curiosidades'],['Fontes da pesquisa','#fontes']];
+const norm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+let CUR='#/';
+function route(h){h=h||CUR;CUR=h;const m=$('#conteudo');
+if(h.startsWith('#/materia/')){m.innerHTML=page(h.slice(10));window.scrollTo(0,0);const b=$('#sh');if(b)b.onclick=async()=>{const u=location.href,s=$('#msg');try{if(navigator.share)await navigator.share({title:document.title,url:u});else{await navigator.clipboard.writeText(u);s.textContent='Link copiado!'}}catch(e){s.textContent='Não foi possível compartilhar.'}}}
+else{if(!m.dataset.home||m.dataset.home!=='1'||m.dataset.cur!=='home'){m.innerHTML=home();m.dataset.home='1';m.dataset.cur='home'}
+const id=h.startsWith('#/')?null:h.slice(1);if(id)setTimeout(()=>{const e=document.getElementById(id);e&&e.scrollIntoView()},30);else window.scrollTo(0,0)}
+if(h.startsWith('#/materia/'))m.dataset.cur='art';
+$('#search').classList.remove('on');$('#mnav').classList.remove('on')}
+$('#cats').innerHTML=NAV.map(([l,i])=>`<a href="#${i}">${l}</a>`).join('');
+$('#mlist').innerHTML=NAV.map(([l,i])=>`<li><a href="#${i}">${l}</a></li>`).join('');
+$('#fcats').innerHTML=NAV.map(([l,i])=>`<li><a href="#${i}">${l}</a></li>`).join('');
+$('#bs').onclick=()=>{const o=$('#search').classList.toggle('on');$('#bs').setAttribute('aria-expanded',o);if(o)$('#q').focus()};
+$('#bm').onclick=()=>{const o=$('#mnav').classList.toggle('on');$('#bm').setAttribute('aria-expanded',o)};
+$('#q').oninput=e=>{const v=norm(e.target.value.trim()),r=$('#res');if(!v){r.innerHTML='';return}
+const f=INDEX.filter(([t])=>norm(t).includes(v));r.innerHTML=f.length?f.map(([t,u])=>`<li><a href="${u}">${esc(t)}</a></li>`).join(''):`<li style="padding:9px 12px">Nenhum resultado para "${esc(e.target.value)}". Tente outra palavra.</li>`};
+$('#up').onclick=()=>window.scrollTo({top:0});
+addEventListener('scroll',()=>$('#up').classList.toggle('on',scrollY>600));
+$('#dt').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+addEventListener('hashchange',()=>route(location.hash||'#/'));
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;e.preventDefault();
+const h=a.getAttribute('href');try{history.replaceState(null,'',h)}catch(_){}
+const id=h.slice(1),el=!h.startsWith('#/')&&document.getElementById(id);
+if(el){el.scrollIntoView();$('#search').classList.remove('on');$('#mnav').classList.remove('on')}else route(h)});
+route(location.hash||'#/');
+
+</script>
+<script src="https://player.vimeo.com/api/player.js"></script>
+</body>
+</html>
